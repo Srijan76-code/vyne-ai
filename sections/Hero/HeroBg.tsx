@@ -1,13 +1,14 @@
 "use client";
 import LaserFlow from "@/components/LaserFlow";
 import React, { useRef } from "react";
+import { AiInputBox } from "../Chat/AiInputBox";
 
 const HeroBg = () => {
   const revealImgRef = useRef(null);
 
   return (
     <div
-      className="relative h-screen overflow-hidden bg-[#060010]"
+      className="relative h-full  bg-black"
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -30,15 +31,18 @@ const HeroBg = () => {
         <LaserFlow
           horizontalBeamOffset={0.1}
           verticalBeamOffset={0.0}
-          color="#cf9eff"
-          horizontalSizing={1.06}
+          color="white"
+          horizontalSizing={1.05}
           verticalSizing={2.0}
         />
       </div>
 
-      <div className="absolute top-3/4 left-1/2 translate-x-[-50%] w-[86%] h-[60%] bg-[#060010] rounded-[20px] border-2 border-neutral-700 flex items-center justify-center text-white text-[2rem] z-[6]">
-        {/* Your content here */}
-      </div>
+
+       <div className="w-[80%] m-auto">
+
+        <AiInputBox   />
+       </div>
+
 
       <img
         ref={revealImgRef}
