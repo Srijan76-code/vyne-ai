@@ -23,7 +23,7 @@ export default function CodeEditorNew() {
         { token: "operator", foreground: "A78BFA" },
       ],
       colors: {
-        "editor.background": "#0B0B0B",
+        "editor.background": "#000000",
         "editor.foreground": "#E5E5E5",
         "editorCursor.foreground": "#FFFFFF",
         "editorLineNumber.foreground": "#4B5563",
@@ -32,16 +32,15 @@ export default function CodeEditorNew() {
         "editor.selectionBackground": "#3B82F61A",
         "editorBracketMatch.border": "#6366F1",
         "editorIndentGuide.background": "#27272A",
-        "editorGutter.background": "#0B0B0B",
+        "editorGutter.background": "#000000",
       },
     });
   };
 
   return (
     <div className="h-screen w-full border-l border-neutral-800 "
-              style={{
-        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.1), transparent 70%), #000000",
-      }}>
+
+      >
       <Editor
       
         beforeMount={handleEditorWillMount}

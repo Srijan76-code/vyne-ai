@@ -42,12 +42,9 @@ export default function MainExplorer({ object }: ObjectWithFiles) {
   console.log("MainExplorer render - explorerData:", explorerData);
 
   return (
-    <div
-      // style={{
-      //   background:
-      //     "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.1), transparent 70%), #000000",
-      // }}
-      className="min-h-screen  p-4"
+    <div 
+
+      className="min-h-screen bg-black  p-4"
     >
       {explorerData ? (
         <>
@@ -55,7 +52,7 @@ export default function MainExplorer({ object }: ObjectWithFiles) {
             Files: {object?.files?.length || 0}
           </div>
           {/* <Folder explorer={explorerData} /> */}
-          <Folder explorer={explorerData} />
+          <Folder explorer={explorer} />
         </>
       ) : (
         <div className="text-neutral-400 text-center py-64">

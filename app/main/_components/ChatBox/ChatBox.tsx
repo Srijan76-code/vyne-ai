@@ -1,121 +1,77 @@
-"use client";
-
-import { Response } from "@/components/ai-elements/response";
-import { useState } from "react";
-
+import React from "react";
+import {
+  Task,
+  TaskContent,
+  TaskItem,
+  TaskItemFile,
+  TaskTrigger,
+} from "@/components/ai-elements/task";
+import AiInput from "@/sections/Chat/AiInput";
+import TextType from "@/components/TextType";
+import ShinyText from "@/components/ShinyText";
+import Content from "./Content";
+import Summary from "./Summary";
+import { useStatus } from "@/store/useStatus";
+import ReasoningComp from "./ReasoningComp";
 type AiFile = {
   path: string;
   contents: string;
 };
 
 interface ChatBoxProps {
-  object: { files: AiFile[] ,summary:string} | undefined;
-  submit: (context: string) => void;
+  object: { files: AiFile[]; summary: string } | undefined;
+  submit: (text: string) => void;
   isLoading: boolean;
   stop: () => void;
 }
-
-export default function ChatBox({
-  object,
-  submit,
-  isLoading,
-  stop,
-}: ChatBoxProps) {
-  const [context, setContext] = useState("");
-
-   console.log("inside chatbox:",object)
-
+const ChatBox = ({ object, submit, isLoading, stop }: ChatBoxProps) => {
+  const { status } = useStatus();
   return (
-    <div className="w-full h-full overflow-y-auto p-4">
-      <div className="flex flex-col gap-4 max-w-2xl mx-auto">
-        
-        {/* Input Section */}
-        <div className="flex gap-4">
-          <textarea
-            className="flex-1 border border-gray-300 rounded p-3 min-h-[100px] resize-y"
-            placeholder="Describe the website you want to generate..."
-            value={context}
-            onChange={(e) => setContext(e.target.value)}
-            disabled={isLoading}
+    <div className="flex flex-col h-full">
+      {/* Empty State */}
+      {status == "ready" &&
+        (!object || !object.files || object.files.length === 0) && (
+          <div className="text-center py-72 ">
+            <p className="text-lg text-neutral-200">
+              What do you want to create?
+            </p>
+            <TextType
+              text={[
+                "Start building with a single prompt.",
+                "No coding needed.",
+              ]}
+              typingSpeed={75}
+              pauseDuration={1500}
+              showCursor={true}
+              cursorCharacter="|"
+              className="text-sm text-neutral-300"
+            />
+          </div>
+        )}
+
+      {status == "submitted" &&
+        (!object || !object.files || object.files.length === 0) && (
+          <ShinyText
+            text="Generating your response..."
+            disabled={false}
+            speed={2.5}
+            className="custom-class text-center py-72"
           />
-          <button
-            className={`px-6 py-3 rounded font-semibold transition ${
-              isLoading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
-            }`}
-            disabled={isLoading}
-            onClick={() => {
-              if (context.trim()) {
-                submit(context);
-              }
-            }}
-          >
-            {isLoading ? 'Generating...' : 'Generate Website'}
-          </button>
-        </div>
-
-        {/* Loading State */}
-        {isLoading && (
-          <div className="bg-blue-50 border border-blue-200 rounded p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-              <span className="text-blue-700">
-                AI is generating your project... {object?.files?.length || 0} files so far
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => stop()}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-            >
-              Stop
-            </button>
-          </div>
         )}
 
-        {/* ⭐ Fixed: Check both object AND object.files */}
-        {object && object.files && object.files.length > 0 && (
-          <div className="mt-4">
-            <h2 className="text-xl font-bold mb-4">
-              Generated Files ({object.files.length})
-            </h2>
-            <div className="space-y-3 max-h-[600px] overflow-y-auto">
-              {object.files.map((file, index) => (
-                <details key={index} className="border border-gray-300 rounded">
-                  <summary className="cursor-pointer p-3 bg-gray-50 hover:bg-gray-100 font-mono text-sm">
-                    📄 {file.path}
-                  </summary>
-                  <pre className="p-4 bg-gray-900 text-gray-100 text-xs overflow-x-auto">
-                    <code>{file.contents}</code>
-                  </pre>
-                </details>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* <ReasoningComp/> */}
 
-        {object && object.summary && (
-          <div className="mt-4">
-            <h2 className="text-xl font-bold mb-2">Project Summary</h2>
-            <div className="p-4 bg-gray-100 border border-gray-300 rounded text-gray-800 whitespace-pre-wrap">
-              <Response>
+      <Content object={object} />
+      <Summary object={object} />
 
-              {object.summary}
-              </Response>
-            </div>
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!isLoading && (!object || !object.files || object.files.length === 0) && (
-          <div className="text-center py-12 text-gray-500">
-            <div className="text-6xl mb-4">💡</div>
-            <p className="text-lg">Enter a description above to generate a website</p>
-            <p className="text-sm mt-2">Try: "Create a todo list app" or "Build a portfolio site"</p>
-          </div>
-        )}
-      </div>
+      {/* <AiInput
+              object={object}
+              submit={submit}
+              isLoading={isLoading}
+              stop={stop}
+            /> */}
     </div>
   );
-}
+};
+
+export default ChatBox;

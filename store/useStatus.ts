@@ -7,7 +7,7 @@ interface DeployStore {
 }
 
 export const useStatus = create<DeployStore>((set) => ({
-  status: "submitted",
+  status: "ready",
   setStatus: (status) => set({ status: status }),
 
 }));

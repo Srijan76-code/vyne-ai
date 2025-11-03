@@ -22,39 +22,51 @@ import {
   PromptInputFooter,
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
+import useChatStore from "@/store/useChatStore";
 import { useStatus } from "@/store/useStatus";
 import { GlobeIcon } from "lucide-react";
 import { useRef, useState } from "react";
+
+
 type AiFile = {
   path: string;
   contents: string;
 };
 
+type Role = 'user' | 'assistant';
+
+interface Message {
+
+  role: Role;
+  content: string;
+
+}
 interface ChatBoxProps {
   object: { files: AiFile[]; summary: string } | undefined;
-  submit: (text: string) => void;
+  submit: (messages: Message) => void;
   isLoading: boolean;
   stop: () => void;
 }
 
-const models = [
-  { id: "gpt-4", name: "GPT-4" },
-  { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
-  { id: "claude-2", name: "Claude 2" },
-  { id: "claude-instant", name: "Claude Instant" },
-  { id: "palm-2", name: "PaLM 2" },
-  { id: "llama-2-70b", name: "Llama 2 70B" },
-  { id: "llama-2-13b", name: "Llama 2 13B" },
-  { id: "cohere-command", name: "Command" },
-  { id: "mistral-7b", name: "Mistral 7B" },
-];
+// const models = [
+//   { id: "gpt-4", name: "GPT-4" },
+//   { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
+//   { id: "claude-2", name: "Claude 2" },
+//   { id: "claude-instant", name: "Claude Instant" },
+//   { id: "palm-2", name: "PaLM 2" },
+//   { id: "llama-2-70b", name: "Llama 2 70B" },
+//   { id: "llama-2-13b", name: "Llama 2 13B" },
+//   { id: "cohere-command", name: "Command" },
+//   { id: "mistral-7b", name: "Mistral 7B" },
+// ];
 
-const SUBMITTING_TIMEOUT = 200;
-const STREAMING_TIMEOUT = 2000;
+// const SUBMITTING_TIMEOUT = 200;
+// const STREAMING_TIMEOUT = 2000;
 
-const AiInput = ({ object, submit, isLoading }: ChatBoxProps) => {
+const AiInput = ({ submit, isLoading }: ChatBoxProps) => {
+  const { messages, addMessage } = useChatStore();
   const [text, setText] = useState<string>("");
-const {status,setStatus}=useStatus()
+  const { status, setStatus } = useStatus();
 
   // const [status, setStatus] = useState<
   //   "submitted" | "streaming" | "ready" | "error"
@@ -105,20 +117,21 @@ const {status,setStatus}=useStatus()
   return (
     <div className="flex flex-col  justify-end size-full">
       <PromptInput
-      className="bg-black"
-      style={{
-        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.1), transparent 70%), #000000",
-      }}
+        className="bg-black"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.1), transparent 70%), #000000",
+        }}
         globalDrop
         multiple
         onSubmit={handleSubmit}
       >
-        <PromptInputBody className="" >
+        <PromptInputBody className="">
           <PromptInputAttachments>
             {(attachment) => <PromptInputAttachment data={attachment} />}
           </PromptInputAttachments>
           <PromptInputTextarea
-          className="p-4 "
+            className="p-4 "
             onChange={(e) => setText(e.target.value)}
             ref={textareaRef}
             value={text}
@@ -142,8 +155,21 @@ const {status,setStatus}=useStatus()
             disabled={!text || isLoading}
             onClick={() => {
               if (text.trim()) {
-                submit(text);
-                setStatus("submitted")
+                const newMessage = {
+                  role: "user",
+                  content: text,
+                };
+                console.log("AiInput - Submitting text:", newMessage);
+
+                const updated = [...messages, newMessage];
+                console.log("AiInput - Submitting text:", updated);
+
+                addMessage(newMessage);
+                submit(updated);
+                setText("");
+                setStatus("submitted");
+                console.log("AiInput - Submitted");
+
               }
             }}
             className="!h-8"
