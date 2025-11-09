@@ -9,6 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { BuildAndDeployVercel } from "./BuildAndDeployVercel";
 
 const Deploy = () => {
   const { url, setUrl } = useDeployStore();
@@ -22,7 +23,7 @@ const Deploy = () => {
     }
     setLoading(true);
     try {
-      const result = await buildAndDeploy(webContainer);
+      const result = await BuildAndDeployVercel(webContainer);
       console.log("Deployment result:", result);
       if (result?.url) setUrl(result.url);
     } catch (err) {
@@ -58,6 +59,7 @@ const Deploy = () => {
           </Tooltip>
         
       )}
+      
     </div>
   );
 };

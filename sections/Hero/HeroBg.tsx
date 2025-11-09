@@ -8,7 +8,7 @@ const HeroBg = () => {
 
   return (
     <div
-      className="relative h-full  bg-black"
+      className="relative h-[135vh] overflow-hidden  bg-black"
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -27,7 +27,7 @@ const HeroBg = () => {
         }
       }}
     >
-      <div className="h-3/4 opacity-85">
+      <div className="h-[104%] opacity-85">
         <LaserFlow
           horizontalBeamOffset={0.1}
           verticalBeamOffset={0.0}
@@ -37,18 +37,19 @@ const HeroBg = () => {
         />
       </div>
 
-
-       <div className="w-[80%] m-auto">
-
-        <AiInputBox   />
-       </div>
-
+      <div
+        className="absolute  top-1/2  left-1/2 -translate-x-1/2 w-[86%] h-[60%] 
+          
+         flex items-center justify-center z-6"
+      >
+        <img src="/main/image.png" alt="" />
+      </div>
 
       <img
         ref={revealImgRef}
         src="/hero_bg.png"
         alt="Reveal effect"
-        className="absolute w-full top-3/4 z-[5] opacity-30 pointer-events-none"
+        className="absolute w-full  z-[5] opacity-30 pointer-events-none"
         style={{
           mixBlendMode: "lighten",
           "--mx": "-9999px",

@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { fa } from "zod/v4/locales";
+import { Loader } from "@/components/ui/loader";
+import { useStatus } from "@/store/useStatus";
 type AiFile = {
   path: string;
   contents: string;
@@ -22,6 +24,7 @@ interface ChatBoxProps {
 }
 const Content = ({ object }: ChatBoxProps) => {
   const [open, setOpen] = useState(false);
+  const { status } = useStatus();
 
   const getLanguageFromFileName = (fileName: string) => {
     const extension = fileName?.split(".").pop();
@@ -77,7 +80,18 @@ const Content = ({ object }: ChatBoxProps) => {
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center gap-2">
-          <div>Generated Files ({object?.files?.length}) </div>
+          {status == "submitted" ? (
+            <>
+              <div>Generating Files </div>
+              <div className="self-end">
+                <Loader variant="typing" size="sm" />
+              </div>
+              <div>({object?.files?.length})</div>
+            </>
+          ) : (
+            <div>Generated Files ({object?.files?.length}) </div>
+          )}
+
           {open ? (
             <ChevronDown className="w-4" />
           ) : (

@@ -5,6 +5,7 @@ import { useWebContainerStore } from "@/store/useWebContainerStore";
 import Preview from "./Preview";
 import { AnimatedLoader } from "../Animations/AnimatedLoader";
 import ShinyText from "@/components/ShinyText";
+import { useStatus } from "@/store/useStatus";
 
 type AiFile = {
   path: string;
@@ -88,14 +89,10 @@ function hasRequiredFiles(files: AiFile[]): boolean {
   );
 }
 
-const FALLBACK_VITE_CONFIG = `import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  plugins: [react()],
-})`;
 
 export default function WebContainers({ object, isLoading }: ChatBoxProps) {
+  const {status}=useStatus()
   const { setWebContainer } = useWebContainerStore();
   const [isReady, setIsReady] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -132,8 +129,15 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
 
     // ⭐ Only run setup ONCE when streaming is complete
     if (hasRunSetupRef.current) {
-      console.log("✓ Setup already completed, skipping");
-      return;
+      // If we previously ran setup but never reached ready state or obtained a serverUrl,
+      // allow retry. This handles races where setup was started but did not finish.
+      console.log("✓ Setup flag is set. isReady:", isReady, "serverUrl:", serverUrl);
+      if (isReady && serverUrl) {
+        console.log("✓ Dev server already ready at", serverUrl, "— skipping setup");
+        return;
+      }
+      console.warn("⚠️ Setup was started earlier but server is not ready — retrying setup");
+      hasRunSetupRef.current = false;
     }
 
     hasRunSetupRef.current = true;
@@ -169,18 +173,18 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
           let contents = file.contents || "";
 
           // ⭐ Fix vite.config.js if broken
-          if (
-            file.path === "vite.config.js" ||
-            file.path === "vite.config.ts"
-          ) {
-            if (
-              contents.includes("from 'vite'import") ||
-              !contents.includes("export default")
-            ) {
-              console.warn("⚠️ Using fallback vite.config.js");
-              contents = FALLBACK_VITE_CONFIG;
-            }
-          }
+          // if (
+          //   file.path === "vite.config.js" ||
+          //   file.path === "vite.config.ts"
+          // ) {
+          //   if (
+          //     contents.includes("from 'vite'import") ||
+          //     !contents.includes("export default")
+          //   ) {
+          //     console.warn("⚠️ Using fallback vite.config.js");
+          //     contents = FALLBACK_VITE_CONFIG;
+          //   }
+          // }
 
           const pathParts = file.path.split("/").filter((p) => p);
           if (pathParts.length === 0) continue;
@@ -296,7 +300,7 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
     );
   }
 
-  if (!object?.files || object.files.length === 0) {
+  if ( (!object?.files || object.files.length === 0)) {
     return (
       <div className="h-dvh flex flex-col justify-center items-center mx-auto ">
         <ShinyText

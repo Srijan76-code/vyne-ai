@@ -3,12 +3,12 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div  className='h-screen w-screen bg-neutral-700'
+    <div  className=''
 
       
       >
       <HeroBg />
-      <div>hello</div>
+      {/* <div>hello</div> */}
     </div>
   )
 }

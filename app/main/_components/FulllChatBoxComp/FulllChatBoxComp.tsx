@@ -32,6 +32,7 @@ export default function FulllChatBoxComp({
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
+
   // auto-scroll to bottom when new message arrives
   useEffect(() => {
     if (scrollRef.current)
@@ -71,22 +72,24 @@ export default function FulllChatBoxComp({
 
         {status == "submitted" &&
           (!object || !object.files || object.files.length === 0) && (
-            <ShinyText
-              text="Generating your response..."
-              disabled={false}
-              speed={2.5}
-              className="custom-class text-center py-72"
-            />
+            <div className="flex justify-center">
+
+              <ShinyText
+                text="Generating your response..."
+                disabled={false}
+                speed={2.5}
+                className="custom-class text-center py-72"
+              />
+            </div>
           )}
 
-        {status == "streaming" &&
+        {status == "submitted" &&
           object &&
           object.files &&
           object.files.length > 0 && (
             <div>
               <Content object={object} />
-
-              <Summary object={object} />
+              {/* <Summary object={object} /> */}
             </div>
           )}
       </div>

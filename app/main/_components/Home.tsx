@@ -20,28 +20,21 @@ import {
 import { CodeXml, Eye } from "lucide-react";
 import { useStatus } from "@/store/useStatus";
 
-import {
-  SiReact,
-  SiTypescript,
-  SiJavascript,
-  SiCss,
-  SiHtml5,
-  SiJson,
-  SiMarkdown,
-} from "@icons-pack/react-simple-icons";
+
 import ShinyText from "@/components/ShinyText";
 import ChatBox from "./ChatBox/ChatBox";
 import useChatStore from "@/store/useChatStore";
 import Conversation from "./Conversation/Conversation";
 import AiInput from "@/sections/Chat/AiInput";
 import FulllChatBoxComp from "./FulllChatBoxComp/FulllChatBoxComp";
+import Retry from "./Webcontainers/Retry";
 
 // isLoading-> true when generating
 // isLoading-> false when ready
 const Home = () => {
   const [tab, setTab] = useState(0);
   const { status, setStatus } = useStatus();
-  const {messages, addMessage } = useChatStore();
+  const { messages, addMessage } = useChatStore();
 
   const { object, submit, isLoading, stop, error } = useObject({
     api: "/api/vyne",
@@ -50,7 +43,7 @@ const Home = () => {
       addMessage({
         id: crypto.randomUUID(),
         role: "assistant",
-        content: object,
+        content: JSON.parse(JSON.stringify(object)),
         timestamp: Date.now(),
       });
     },
@@ -66,7 +59,7 @@ const Home = () => {
     }
   }, [isLoading]);
 
-  console.log("Home - isLoading:", isLoading, "object:", object);
+  // console.log("Home - isLoading:", isLoading, "object:", object);
 
   return (
     <div className="h-dvh p-2">
@@ -88,8 +81,12 @@ const Home = () => {
         >
           {" "}
           {/* 30% width */}
-          <FulllChatBoxComp object={object} submit={submit} isLoading={isLoading} stop={stop} />
-
+          <FulllChatBoxComp
+            object={object}
+            submit={submit}
+            isLoading={isLoading}
+            stop={stop}
+          />
         </Panel>
 
         <PanelResizeHandle className="w-1 rounded-2xl bg-transparent hover:bg-white/80 hover:shadow-[0_0_10px_#ffffff80] transition-all " />
@@ -147,6 +144,7 @@ const Home = () => {
                 </Tooltip>
               </ButtonGroup>
               <div>
+                <Retry/>
                 <Deploy />
               </div>
             </div>
@@ -167,16 +165,17 @@ const Home = () => {
                   ) : (
                     <>
                       <Panel defaultSize={30}>
-                        {" "}
                         {/* Left explorer 30% */}
-                        {!isLoading && messages[-1]?.role==="assistant" ? (
-                          <MainExplorer object={messages[-1].content}/>
-                        )
-                      :(
-
-                        <MainExplorer object={object} />
-                      )}
+                        {!isLoading &&
+                        messages[messages.length - 1]?.role === "assistant" ? (
+                          <MainExplorer
+                            object={messages[messages.length - 1].content}
+                          />
+                        ) : (
+                          <MainExplorer object={object} />
+                        )}
                       </Panel>
+
                       <PanelResizeHandle className="w-1 bg-transparent hover:bg-white/80 hover:shadow-[0_0_10px_#ffffff80] transition-all " />
 
                       <Panel defaultSize={70}>
@@ -201,5 +200,3 @@ const Home = () => {
 };
 
 export default Home;
-
-

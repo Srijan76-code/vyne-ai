@@ -1,11 +1,10 @@
-
 import type { WebContainer } from "@webcontainer/api";
 
 export async function buildAndDeploy(webContainer: WebContainer) {
   // 1. Run build
   const buildProcess = await webContainer.spawn("npm", ["run", "build"]);
   const buildLogs: string[] = [];
-  
+
   buildProcess.output.pipeTo(
     new WritableStream({
       write(chunk) {
@@ -42,34 +41,55 @@ export async function buildAndDeploy(webContainer: WebContainer) {
   if (!outputDir) {
     let rootList: string[] = [];
     try {
-      const rootEntries = await webContainer.fs.readdir("/", { withFileTypes: true });
-      rootList = rootEntries.map(e => e.name);
+      const rootEntries = await webContainer.fs.readdir("/", {
+        withFileTypes: true,
+      });
+      rootList = rootEntries.map((e) => e.name);
     } catch (e) {
       // ignore
     }
     throw new Error(
       `No build output folder found. Checked: ${candidates.join(
         ", "
-      )}. Root contents: ${JSON.stringify(rootList)}\n\nRecent build logs:\n${buildLogs.join(
-        ""
-      )}`
+      )}. Root contents: ${JSON.stringify(
+        rootList
+      )}\n\nRecent build logs:\n${buildLogs.join("")}`
     );
   }
 
   // 3. Collect all files recursively
   const filesList: { path: string; data: Uint8Array }[] = [];
-  
+
   async function collectFiles(basePath: string) {
-    const entries = await webContainer.fs.readdir(basePath, { withFileTypes: true });
-    
+    const entries = await webContainer.fs.readdir(basePath, {
+      withFileTypes: true,
+    });
+
     for (const entry of entries) {
       const fullPath = `${basePath}/${entry.name}`;
-      
+
       if (entry.isFile()) {
         const fileData = await webContainer.fs.readFile(fullPath);
         // Remove leading slash and output directory prefix
-        const relativePath = fullPath.replace(outputDir!, "").replace(/^\//, "");
+        // Ensure relative paths have no leading slashes or "dist" prefix
+        // --- Normalize path (remove any leading slash or dist/ prefix) ---
+        let relativePath = fullPath;
+
+        // 1. Remove leading slash if exists
+        if (relativePath.startsWith("/")) relativePath = relativePath.slice(1);
+
+        // 2. Remove "dist/" or any outputDir prefix recursively
+        if (relativePath.startsWith(`${outputDir.replace("/", "")}/`)) {
+          relativePath = relativePath.slice(
+            outputDir.replace("/", "").length + 1
+          );
+        }
+
+        // 3. Final cleanup (safety)
+        relativePath = relativePath.replace(/^dist\//, "").replace(/^\/+/, "");
+
         filesList.push({ path: relativePath, data: fileData });
+        console.log("✅ Final normalized path:", relativePath);
       } else if (entry.isDirectory()) {
         await collectFiles(fullPath);
       }
@@ -92,7 +112,7 @@ export async function buildAndDeploy(webContainer: WebContainer) {
   };
 
   const form = new FormData();
-  
+
   for (const file of filesList) {
     const sha = await digestHex(file.data);
     manifest.files[file.path] = sha;
@@ -102,6 +122,11 @@ export async function buildAndDeploy(webContainer: WebContainer) {
 
   form.append("manifest", JSON.stringify(manifest));
 
+  console.log(
+    "🧱 Files ready for deploy:",
+    filesList.map((f) => f.path)
+  );
+
   // 5. Deploy to Cloudflare Pages
   const res = await fetch("/api/deploy", {
     method: "POST",
@@ -110,7 +135,7 @@ export async function buildAndDeploy(webContainer: WebContainer) {
 
   const text = await res.text();
   let data: any = null;
-  
+
   try {
     data = JSON.parse(text);
   } catch (e) {

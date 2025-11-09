@@ -51,8 +51,8 @@ export default function MainExplorer({ object }: ObjectWithFiles) {
           <div className="text-sm text-gray-400 mb-2">
             Files: {object?.files?.length || 0}
           </div>
-          {/* <Folder explorer={explorerData} /> */}
-          <Folder explorer={explorer} />
+          <Folder explorer={explorerData} />
+          {/* <Folder explorer={explorer} /> */}
         </>
       ) : (
         <div className="text-neutral-400 text-center py-64">
