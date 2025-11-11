@@ -1,24 +1,22 @@
 import { prisma } from "@/lib/prisma";
 
-export async function POST(req: Request) {
 
-    const {id,userId} = await req.json();
+// get all projects for community page
+export async function GET() {
 
-    
     try {
-        const createdProject = await prisma.project.create({
-            data:{
-                id: Number(id),
-                userId: Number(userId)
+        const projects = await prisma.project.findMany()
 
-            }
-        })
-        return new Response (JSON.stringify(createdProject), {status: 201})
+        return new Response (JSON.stringify(projects), {status: 200})
     } catch (error) {
-        return new Response ("Project creation failed", {status: 400})
+
+        return new Response ("Project fetch failed", {status: 400})
         
     }
 
-
 }
+
+
+
+
 

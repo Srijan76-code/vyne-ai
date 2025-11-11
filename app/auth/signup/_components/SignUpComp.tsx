@@ -25,7 +25,7 @@ const SignUpComp = () => {
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ emailAddress, password }),
+      body: JSON.stringify({ email:emailAddress, password }),
     });
     setLoading(false);
     if (res.ok) router.push("/main");

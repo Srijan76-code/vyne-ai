@@ -144,7 +144,7 @@ const Home = () => {
                 </Tooltip>
               </ButtonGroup>
               <div>
-                <Retry/>
+                {/* <Retry/> */}
                 <Deploy />
               </div>
             </div>

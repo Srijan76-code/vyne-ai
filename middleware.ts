@@ -5,16 +5,8 @@ import { jwtVerify } from "jose";
 
 const PUBLIC_PATHS = ["/", "/auth/login", "/auth/signup", "/api/auth/login", "/api/auth/signup", "/favicon.ico"];
 
-// defensive header block for known bypass attempts
-const BYPASS_HEADERS = ["x-middleware-subrequest", "x-nextjs-middleware-subrequest"];
-
 export async function middleware(req: NextRequest) {
-  // block suspicious bypass headers
-  for (const h of BYPASS_HEADERS) {
-    if (req.headers.get(h)) {
-      return new NextResponse("Forbidden", { status: 403 });
-    }
-  }
+
 
   const { pathname } = req.nextUrl;
 

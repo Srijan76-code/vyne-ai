@@ -24,7 +24,7 @@ const LoginComp = () => {
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ emailAddress, password }),
+      body: JSON.stringify({ email:emailAddress, password }),
     });
     if (res.ok) router.push("/main");
     else alert("Invalid credentials");

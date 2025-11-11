@@ -47,8 +47,8 @@ model Project {
   Likes       Int      @default(0)
   Clones      Int      @default(0)
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int     
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@index([isPublic, Likes])
 }
