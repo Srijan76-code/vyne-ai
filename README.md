@@ -72,7 +72,3 @@ VYNE integrates multiple layers for a seamless AI-driven experience:
 | **Hosting**            | Vercel                                   |
 
 ---
-
-### ✨ Summary
-
-> **VYNE** transforms ideas into real, production-grade websites powered by AI — enabling instant prototyping, faster iteration, and early user validation.
