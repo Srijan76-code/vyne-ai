@@ -34,3 +34,49 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Proposal
+Demo Proposal – VYNE: AI Website Builder
+
+1. Project Title
+  VYNE – AI Website Builder
+
+2. Problem Statement
+
+Founders and developers often build too early — before knowing if users even care. VYNE brings ideas to life instantly with real code and a live editor, so you can show, test, and verify your concept with real users before building the full product.
+
+3. System Architecture
+The architecture of VYNE outlines seamless interaction between the frontend, backend, AI layer, authentication, database, and hosting services.
+Frontend: Next.js (Fullstack Framework)
+
+
+Backend: Next.js API routes
+
+AI: Gemini 2.5 Pro + Vercel AI Sdk
+
+Database: Neon (PostgreSQL) via Prisma ORM
+
+Authentication: Using JWT 
+
+Hosting: Vercel (for both frontend and backend)
+
+4. Key Features
+   
+Authentication & Authorization:  Secure user accounts and session management using JWT.
+AI Website Generation: Create complete, responsive websites directly from natural-language prompts
+Community Feature: Searching , Sorting , Filtering ,  Pagination
+Hosting: Instant deployment on Cloudfare with automatic domain configuration.
+Routing : Routing for multiple pages .
+CRUD : CRUD using APIs and Database
+
+5.Tech Stack
+Frontend + Backend: Next.js (Fullstack Framework)
+AI: Gemini 2.5 Pro + LangChain
+Database: Neon (PostgreSQL) via Prisma ORM
+Authentication: JWT
+Hosting: Vercel
+
+
+
+
+
