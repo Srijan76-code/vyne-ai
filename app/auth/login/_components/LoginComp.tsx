@@ -93,13 +93,13 @@ if (res.ok) {
                     )}
                   </button>
                 </div>
-
+{/* 
                 <div className="flex items-center gap-1">
                   <InfoIcon className="w-3 h-3 " />
                   <p className="text-xs ">
                     Password must be at least 8 characters long!
                   </p>
-                </div>
+                </div> */}
               </div>
               <div >
                 <Button
