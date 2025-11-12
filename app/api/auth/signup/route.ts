@@ -5,8 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
-    const cookieStore =await cookies();
-  
+  const cookieStore = await cookies();
+
   const { email, password } = await req.json();
 
   if (!email || !password) {
@@ -22,14 +22,12 @@ export async function POST(req: Request) {
     const token = await signToken({ id: user.id, email: user.email }, "7d");
 
     const res = NextResponse.json({ ok: true, id: user.id, email: user.email });
-cookieStore.set({
-      name: "token",
-      value: token,
+    cookieStore.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     });
     return res;
   } catch (error) {
@@ -38,11 +36,14 @@ cookieStore.set({
       error.message.includes("Unique constraint failed")
     ) {
       return NextResponse.json(
-        { error: "User already exists" },
-        { status: 400 }
+        { error: "Email already exists" },
+        { status: 409 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: "Internal server error" },
+        { status: 500 }
       );
     }
   }
 }
-
-

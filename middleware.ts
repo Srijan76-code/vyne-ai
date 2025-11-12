@@ -26,7 +26,7 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    // use jose jwtVerify in middleware (Edge-compatible)
+
     await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET!));
     return NextResponse.next();
   } catch (e) {
@@ -40,3 +40,5 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: ["/((?!_next/|api/auth/login|api/auth/signup|favicon.ico).*)"],
 };
+
+

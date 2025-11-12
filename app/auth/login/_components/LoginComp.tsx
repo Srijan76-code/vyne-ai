@@ -16,18 +16,26 @@ const LoginComp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
+     setError(null);
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email:emailAddress, password }),
     });
-    if (res.ok) router.push("/main");
-    else alert("Invalid credentials");
+     setLoading(false);
+
+if (res.ok) {
+      router.push("/main");
+    } else {
+      const j = await res.json();
+      setError(j.error || "Something went wrong");
+    }
   }
 
   return (

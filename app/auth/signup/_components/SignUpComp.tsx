@@ -16,12 +16,13 @@ const SignUpComp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,8 +32,7 @@ const SignUpComp = () => {
     if (res.ok) router.push("/main");
     else {
       const j = await res.json();
-      console.log(j?.error || "Error");
-      setError(true);
+      setError(j?.error || "Something went wrong");
     }
   }
 
