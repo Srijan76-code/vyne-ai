@@ -1,14 +1,17 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Project" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL DEFAULT 'Untitled Project',
     "content" JSONB NOT NULL,
     "deploymentStatus" TEXT,
@@ -19,7 +22,7 @@ CREATE TABLE "Project" (
     "publicDescription" TEXT,
     "Likes" INTEGER NOT NULL DEFAULT 0,
     "Clones" INTEGER NOT NULL DEFAULT 0,
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
 );

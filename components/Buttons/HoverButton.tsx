@@ -1,4 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, type MouseEventHandler, type ReactNode } from 'react';
+
+type HoverButtonProps = {
+  children?: ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
+  disabled?: boolean;
+  glowColor?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  hoverTextColor?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const HoverButton = ({ 
   children, 
@@ -6,20 +17,22 @@ const HoverButton = ({
   className = '', 
   disabled = false,
   glowColor = 'white',
-  backgroundColor = 'transparent', // gray-900 equivalent
+  backgroundColor = 'transparent',
   textColor = '#ffffff',
-  hoverTextColor = 'black', // cyan-300 equivalent
+  hoverTextColor = 'black',
   ...props
-}) => {
-  const buttonRef = useRef(null);
+}: HoverButtonProps) => {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const [glowPosition, setGlowPosition] = useState({ x: 50, y: 50 });
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove: MouseEventHandler = (e) => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const ex = (e as React.MouseEvent<HTMLButtonElement>).clientX;
+      const ey = (e as React.MouseEvent<HTMLButtonElement>).clientY;
+      const x = ex - rect.left;
+      const y = ey - rect.top;
       setGlowPosition({ x, y });
     }
   };
@@ -34,7 +47,7 @@ const HoverButton = ({
 
   return (
     <button
-    {...props}
+      {...props}
       ref={buttonRef}
       onClick={onClick}
       disabled={disabled}
@@ -52,7 +65,6 @@ const HoverButton = ({
         backgroundColor: backgroundColor,
         color: isHovered ? hoverTextColor : textColor,
       }}>
-      {/* Glow effect div */}
       <div
         className={`
           absolute w-[200px] h-[200px] rounded-full opacity-90 pointer-events-none 
@@ -65,10 +77,9 @@ const HoverButton = ({
           background: `radial-gradient(circle, ${glowColor} 10%, transparent 70%)`,
           zIndex: 0,
         }} />
-      {/* Button content */}
       <span className="relative z-10">{children}</span>
     </button>
   );
 };
 
-export { HoverButton }
+export { HoverButton };

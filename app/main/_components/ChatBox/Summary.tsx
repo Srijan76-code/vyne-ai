@@ -9,7 +9,7 @@ type AiFile = {
 };
 
 interface ChatBoxProps {
-  object: { files: AiFile[]; summary: string } | undefined;
+  object: { files: AiFile[]; summary?: string } | undefined;
 }
 
 const Summary = ({ object }: ChatBoxProps) => {

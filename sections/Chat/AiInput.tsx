@@ -26,24 +26,19 @@ import useChatStore from "@/store/useChatStore";
 import { useStatus } from "@/store/useStatus";
 import { GlobeIcon } from "lucide-react";
 import { useRef, useState } from "react";
-
+import type { ChatStatus } from "ai";
 
 type AiFile = {
   path: string;
   contents: string;
 };
 
-type Role = 'user' | 'assistant';
+type RoleType = "user" | "assistant" | "system";
+type Message = { role: RoleType; content: string | { files: AiFile[]; summary?: string } };
 
-interface Message {
-
-  role: Role;
-  content: string;
-
-}
 interface ChatBoxProps {
-  object: { files: AiFile[]; summary: string } | undefined;
-  submit: (messages: Message) => void;
+  object: { files?: AiFile[]; summary?: string } | undefined;
+  submit: (messages: Message[]) => void;
   isLoading: boolean;
   stop: () => void;
 }
@@ -155,7 +150,7 @@ const AiInput = ({ submit, isLoading }: ChatBoxProps) => {
             disabled={!text || isLoading}
             onClick={() => {
               if (text.trim()) {
-                const newMessage = {
+                const newMessage: Message = {
                   role: "user",
                   content: text,
                 };
@@ -173,7 +168,9 @@ const AiInput = ({ submit, isLoading }: ChatBoxProps) => {
               }
             }}
             className="!h-8"
-            status={status}
+            status={status as ChatStatus}
+            size="sm"
+            variant="ghost"
           />
         </PromptInputFooter>
       </PromptInput>

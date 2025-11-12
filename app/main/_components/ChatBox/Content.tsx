@@ -14,13 +14,14 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { fa } from "zod/v4/locales";
 import { Loader } from "@/components/ui/loader";
 import { useStatus } from "@/store/useStatus";
+
 type AiFile = {
   path: string;
   contents: string;
 };
 
 interface ChatBoxProps {
-  object: { files: AiFile[]; summary: string } | undefined;
+  object: { files?: AiFile[]; summary?: string } | undefined;
 }
 const Content = ({ object }: ChatBoxProps) => {
   const [open, setOpen] = useState(false);
@@ -130,7 +131,7 @@ const Content = ({ object }: ChatBoxProps) => {
               <div className="p-4">
                 {object && object.files && object.files.length > 0 && (
                   <div className="space-y-3 max-h-[600px] overflow-y-auto">
-                    {object.files.map((file, index) => (
+                    {object.files.map((file: AiFile, index: number) => (
                       <div key={index}>{renderTaskItem(file, index)}</div>
                     ))}
                   </div>

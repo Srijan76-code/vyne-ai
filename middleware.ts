@@ -2,10 +2,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { cookies } from "next/headers";
 
 const PUBLIC_PATHS = ["/", "/auth/login", "/auth/signup", "/api/auth/login", "/api/auth/signup", "/favicon.ico"];
 
 export async function middleware(req: NextRequest) {
+  const cookieStore =await cookies();
+
 
 
   const { pathname } = req.nextUrl;
@@ -15,7 +18,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // read cookie token
-  const token = req.cookies.get("token")?.value;
+  const token = cookieStore.get("token")?.value;
   if (!token) {
     const url = req.nextUrl.clone();
     url.pathname = "/auth/login";

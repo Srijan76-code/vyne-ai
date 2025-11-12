@@ -10,7 +10,7 @@ type AiFile = {
 
 interface AiObject {
   files: AiFile[];
-  summary: string;
+  summary?: string;
 }
 
 interface Message {

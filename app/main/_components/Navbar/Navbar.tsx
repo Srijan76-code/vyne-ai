@@ -8,11 +8,14 @@ import {
 import {
   ButtonGroup,
   ButtonGroupSeparator,
-  ButtonGroupText,
 } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import { CodeXml, Eye } from "lucide-react";
-const Navbar = ({ setTab }) => {
+type NavbarProps = {
+  setTab: (idx: number) => void;
+};
+
+const Navbar = ({ setTab }: NavbarProps) => {
   return (
     <div className="h-[5%] flex  items-center space-x-4 ">
       <div className="">logo</div>

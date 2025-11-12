@@ -10,14 +10,18 @@ import { useStatus } from "@/store/useStatus";
 import Content from "../ChatBox/Content";
 import Summary from "../ChatBox/Summary";
 import CollapsableContainer from "../Animations/CollapsableContainer";
+
 type AiFile = {
   path: string;
   contents: string;
 };
 
+type RoleType = "user" | "assistant" | "system";
+type Message = { role: RoleType; content: string | { files: AiFile[]; summary?: string } };
+
 interface ChatBoxProps {
-  object: { files: AiFile[]; summary: string } | undefined;
-  submit: (text: string) => void;
+  object: { files?: AiFile[]; summary?: string } | undefined;
+  submit: (messages: Message[]) => void;
   isLoading: boolean;
   stop: () => void;
 }
@@ -58,6 +62,8 @@ export default function FulllChatBoxComp({
               showCursor={true}
               cursorCharacter="|"
               className="text-sm text-neutral-300"
+              variableSpeed={undefined}
+              onSentenceComplete={() => {}}
             />
           </div>
         )}

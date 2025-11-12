@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/jwt";
+import { cookies } from "next/headers";
 
 export async function GET(req: Request) {
+  const cookieStore =await cookies();
+
   const token =
-    req.cookies?.get?.("token")?.value ??
+    cookieStore.get("token")?.value ??
     req.headers.get("authorization")?.split(" ")[1];
   if (!token)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -23,13 +26,3 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Invalid token" }, { status: 403 });
   }
 }
-
-
-
-
-
-
-
-
-
-

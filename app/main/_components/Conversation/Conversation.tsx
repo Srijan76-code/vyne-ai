@@ -1,8 +1,12 @@
-import { convo } from "@/data/convo";
 import useChatStore from "@/store/useChatStore";
 import React from "react";
 import Content from "../ChatBox/Content";
 import Summary from "../ChatBox/Summary";
+
+type AiFile = {
+  path: string;
+  contents: string;
+};
 
 const ConversationComp = () => {
   const { messages } = useChatStore();
@@ -16,16 +20,16 @@ const ConversationComp = () => {
               msg.role === "user" && "bg-neutral-900 self-end"
             }`}
           >
-            {msg?.role == "assistant" && (
-              
-                <div className="text-sm space-y-4">
-                  <Content object={msg.content} />
-                  <Summary object={msg.content} />
-                </div>
-            
+            {msg?.role === "assistant" && typeof msg.content === "object" && (
+              <div className="text-sm space-y-4">
+                <Content object={msg.content as { files: AiFile[]; summary?: string } | undefined} />
+                <Summary object={msg.content as { files: AiFile[]; summary?: string } | undefined} />
+              </div>
             )}
 
-            <p className="text-sm ">{msg?.role == "user" && msg.content}</p>
+            <p className="text-sm ">
+              {msg?.role === "user" && typeof msg.content === "string" ? msg.content : null}
+            </p>
           </div>
         </div>
       ))}

@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { signToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
+    const cookieStore =await cookies();
+  
   const { email, password } = await req.json();
 
   if (!email || !password) {
@@ -19,7 +22,7 @@ export async function POST(req: Request) {
     const token = await signToken({ id: user.id, email: user.email }, "7d");
 
     const res = NextResponse.json({ ok: true, id: user.id, email: user.email });
-    res.cookies.set({
+cookieStore.set({
       name: "token",
       value: token,
       httpOnly: true,

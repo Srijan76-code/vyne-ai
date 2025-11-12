@@ -3,7 +3,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { ToolUIPart } from "ai";
+import type { UIToolInvocation, ToolUIPart } from "ai";
 import {
   type ComponentProps,
   createContext,
@@ -11,8 +11,13 @@ import {
   useContext,
 } from "react";
 
+// Define approval type separately since it's not part of standard ToolUIPart
+type ApprovalState = {
+  approved: boolean;
+};
+
 type ConfirmationContextValue = {
-  approval: ToolUIPart["approval"];
+  approval: ApprovalState | undefined;
   state: ToolUIPart["state"];
 };
 
@@ -31,7 +36,7 @@ const useConfirmation = () => {
 };
 
 export type ConfirmationProps = ComponentProps<typeof Alert> & {
-  approval?: ToolUIPart["approval"];
+  approval?: ApprovalState;
   state: ToolUIPart["state"];
 };
 
@@ -69,7 +74,7 @@ export const ConfirmationRequest = ({ children }: ConfirmationRequestProps) => {
   const { state } = useConfirmation();
 
   // Only show when approval is requested
-  if (state !== "approval-requested") {
+  if ((state as unknown as string) !== "approval-requested") {
     return null;
   }
 
@@ -88,9 +93,8 @@ export const ConfirmationAccepted = ({
   // Only show when approved and in response states
   if (
     !approval?.approved ||
-    (state !== "approval-responded" &&
-      state !== "output-denied" &&
-      state !== "output-available")
+    ((state as unknown as string) !== "approval-responded" &&
+      (state as unknown as string) !== "output-denied")
   ) {
     return null;
   }
@@ -110,9 +114,8 @@ export const ConfirmationRejected = ({
   // Only show when rejected and in response states
   if (
     approval?.approved !== false ||
-    (state !== "approval-responded" &&
-      state !== "output-denied" &&
-      state !== "output-available")
+    ((state as unknown as string) !== "approval-responded" &&
+      (state as unknown as string) !== "output-denied")
   ) {
     return null;
   }
@@ -129,7 +132,7 @@ export const ConfirmationActions = ({
   const { state } = useConfirmation();
 
   // Only show when approval is requested
-  if (state !== "approval-requested") {
+  if ((state as unknown as string) !== "approval-requested") {
     return null;
   }
 

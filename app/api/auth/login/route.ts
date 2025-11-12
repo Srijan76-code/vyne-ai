@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import {prisma} from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { signToken } from "@/lib/jwt";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
+   const cookieStore =await cookies();
+
 
   if (!email || !password) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -19,7 +22,7 @@ export async function POST(req: Request) {
   const token = await signToken({ id: user.id, email: user.email }, "7d");
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set({
+  cookieStore.set({
     name: "token",
     value: token,
     httpOnly: true,

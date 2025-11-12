@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import { AiInputBox } from "../Chat/AiInputBox";
 
 const HeroBg = () => {
-  const revealImgRef = useRef(null);
+  const revealImgRef = useRef<HTMLImageElement>(null);
 
   return (
     <div
@@ -52,15 +52,13 @@ const HeroBg = () => {
         className="absolute w-full  z-[5] opacity-30 pointer-events-none"
         style={{
           mixBlendMode: "lighten",
-          "--mx": "-9999px",
-          "--my": "-9999px",
           WebkitMaskImage:
             "radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,1) 0px, rgba(255,255,255,0.95) 60px, rgba(255,255,255,0.6) 120px, rgba(255,255,255,0.25) 180px, rgba(255,255,255,0) 240px)",
           maskImage:
             "radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,1) 0px, rgba(255,255,255,0.95) 60px, rgba(255,255,255,0.6) 120px, rgba(255,255,255,0.25) 180px, rgba(255,255,255,0) 240px)",
           WebkitMaskRepeat: "no-repeat",
           maskRepeat: "no-repeat",
-        }}
+        } as React.CSSProperties & { "--mx"?: string; "--my"?: string }}
       />
     </div>
   );

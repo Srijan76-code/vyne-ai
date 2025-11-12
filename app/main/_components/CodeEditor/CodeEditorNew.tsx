@@ -7,7 +7,7 @@ import { useCurrentFileStore } from "@/store/useCurrentFileStore";
 export default function CodeEditorNew() {
   const { currentFile } = useCurrentFileStore();
 
-  const handleEditorWillMount = (monacoInstance) => {
+  const handleEditorWillMount = (monacoInstance: typeof monaco) => {
     monacoInstance.editor.defineTheme("vyne-premium-dark", {
       base: "vs-dark",
       inherit: true,
@@ -45,15 +45,15 @@ export default function CodeEditorNew() {
       
         beforeMount={handleEditorWillMount}
         theme="vyne-premium-dark"
-        path={currentFile?.name}
-        defaultValue={currentFile?.contents}
+        path={(currentFile as unknown as { name?: string })?.name ?? ""}
+        defaultValue={(currentFile as unknown as { contents?: string })?.contents ?? ""}
         options={{
           fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
           fontLigatures: true,
           fontSize: 14,
           lineHeight: 22,
           cursorBlinking: "smooth",
-          cursorSmoothCaretAnimation: true,
+          cursorSmoothCaretAnimation: "on",
           smoothScrolling: true,
           minimap: { enabled: false },
           padding: { top: 16 },

@@ -60,11 +60,10 @@ export async function BuildAndDeployVercel(webContainer: WebContainer) {
   const VERCEL_TOKEN = process.env.NEXT_PUBLIC_VERCEL_TOKEN;
   const VERCEL_TEAM_ID = process.env.NEXT_PUBLIC_VERCEL_TEAM_ID; // optional
 
-  console.log("Using Vercel Token:", VERCEL_TOKEN ? "✅" : "❌ MISSING");
-  console.log("Using Vercel Team ID:", VERCEL_TEAM_ID);
+
 
   if (!VERCEL_TOKEN ) {
-    throw new Error("❌ Missing VERCEL_TOKEN");
+    throw new Error(" Missing VERCEL_TOKEN");
   }
 
   // STEP 4: Prepare the API Payload

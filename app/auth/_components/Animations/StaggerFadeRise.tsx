@@ -2,27 +2,23 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ReactNode } from 'react';
 
 import { staggerContainerVariants } from './variants';
 
+type StaggerFadeRiseProps = {
+  children?: ReactNode;
+  className?: string;
+};
 
-const StaggerFadeRise = ({ children, className }) => {
+const StaggerFadeRise = ({ children, className }: StaggerFadeRiseProps) => {
   return (
     <motion.div
-      // Pass any custom styles
       className={className}
-      
-      // Use our exported variants
       variants={staggerContainerVariants}
-      
-      // Start in the "hidden" state
       initial="hidden"
-      
-      // Animate to "visible" when it enters the viewport
       whileInView="visible"
-      
-      // Only run this animation once
-      // viewport={{ once: true }}
+      viewport={{ once: true }}
     >
       {children}
     </motion.div>

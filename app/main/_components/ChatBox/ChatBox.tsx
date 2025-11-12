@@ -18,9 +18,13 @@ type AiFile = {
   contents: string;
 };
 
+interface Role { /* reuse local Role definition to match other files */ }
+type RoleType = "user" | "assistant" | "system";
+type Message = { role: RoleType; content: string | { files: AiFile[]; summary?: string } };
+
 interface ChatBoxProps {
   object: { files: AiFile[]; summary: string } | undefined;
-  submit: (text: string) => void;
+  submit: (messages: Message[]) => void;
   isLoading: boolean;
   stop: () => void;
 }
@@ -45,6 +49,8 @@ const ChatBox = ({ object, submit, isLoading, stop }: ChatBoxProps) => {
               showCursor={true}
               cursorCharacter="|"
               className="text-sm text-neutral-300"
+              variableSpeed={undefined}
+              onSentenceComplete={() => {}}
             />
           </div>
         )}

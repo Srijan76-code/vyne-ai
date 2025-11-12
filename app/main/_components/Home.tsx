@@ -29,6 +29,11 @@ import AiInput from "@/sections/Chat/AiInput";
 import FulllChatBoxComp from "./FulllChatBoxComp/FulllChatBoxComp";
 import Retry from "./Webcontainers/Retry";
 
+type AiFile = {
+  path: string;
+  contents: string;
+};
+
 // isLoading-> true when generating
 // isLoading-> false when ready
 const Home = () => {
@@ -40,11 +45,10 @@ const Home = () => {
     api: "/api/vyne",
     schema: ProjectSchema,
     onFinish({ object }) {
+      // addMessage expects a Message { role, content }
       addMessage({
-        id: crypto.randomUUID(),
         role: "assistant",
         content: JSON.parse(JSON.stringify(object)),
-        timestamp: Date.now(),
       });
     },
     onError(err) {
@@ -82,7 +86,7 @@ const Home = () => {
           {" "}
           {/* 30% width */}
           <FulllChatBoxComp
-            object={object}
+            object={object as { files?: AiFile[]; summary?: string } | undefined}
             submit={submit}
             isLoading={isLoading}
             stop={stop}
@@ -169,10 +173,14 @@ const Home = () => {
                         {!isLoading &&
                         messages[messages.length - 1]?.role === "assistant" ? (
                           <MainExplorer
-                            object={messages[messages.length - 1].content}
+                            object={
+                              typeof messages[messages.length - 1]?.content === "object"
+                                ? (messages[messages.length - 1].content as { files: AiFile[] })
+                                : undefined
+                            }
                           />
                         ) : (
-                          <MainExplorer object={object} />
+                          <MainExplorer object={object as unknown as { files: AiFile[] }} />
                         )}
                       </Panel>
 
@@ -188,7 +196,7 @@ const Home = () => {
                 </PanelGroup>
               ) : (
                 <Panel>
-                  <WebContainers object={object} isLoading={isLoading} />
+                  <WebContainers object={object as unknown as { files: AiFile[] }} isLoading={isLoading} />
                 </Panel>
               )}
             </div>

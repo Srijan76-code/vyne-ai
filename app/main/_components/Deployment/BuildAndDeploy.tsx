@@ -79,9 +79,10 @@ export async function buildAndDeploy(webContainer: WebContainer) {
         if (relativePath.startsWith("/")) relativePath = relativePath.slice(1);
 
         // 2. Remove "dist/" or any outputDir prefix recursively
-        if (relativePath.startsWith(`${outputDir.replace("/", "")}/`)) {
+        const safeOutputDir = outputDir ?? "";
+        if (relativePath.startsWith(`${safeOutputDir.replace("/", "")}/`)) {
           relativePath = relativePath.slice(
-            outputDir.replace("/", "").length + 1
+            safeOutputDir.replace("/", "").length + 1
           );
         }
 
@@ -105,7 +106,9 @@ export async function buildAndDeploy(webContainer: WebContainer) {
   };
 
   const digestHex = async (u8: Uint8Array) => {
-    const hash = await crypto.subtle.digest("SHA-256", u8);
+    // Convert Uint8Array to proper ArrayBuffer for digest
+    const buffer = u8.buffer.slice(u8.byteOffset, u8.byteOffset + u8.byteLength) as ArrayBuffer;
+    const hash = await crypto.subtle.digest("SHA-256", buffer);
     return Array.from(new Uint8Array(hash))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
@@ -116,7 +119,8 @@ export async function buildAndDeploy(webContainer: WebContainer) {
   for (const file of filesList) {
     const sha = await digestHex(file.data);
     manifest.files[file.path] = sha;
-    const blob = new Blob([file.data], { type: "application/octet-stream" });
+
+    const blob = new Blob([file.data as BlobPart], { type: "application/octet-stream" });
     form.append(sha, blob, file.path);
   }
 
