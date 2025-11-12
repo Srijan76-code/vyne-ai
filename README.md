@@ -73,13 +73,6 @@ VYNE integrates multiple layers for a seamless AI-driven experience:
 
 ---
 
-## 📦 Deployment
-
-Deploy seamlessly using the [**Vercel Platform**](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
-Read the [Next.js Deployment Guide](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
----
-
 ### ✨ Summary
 
 > **VYNE** transforms ideas into real, production-grade websites powered by AI — enabling instant prototyping, faster iteration, and early user validation.
