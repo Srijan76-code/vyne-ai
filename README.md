@@ -25,7 +25,7 @@ Edit `app/page.tsx` — the page auto-updates as you modify the code.
 
 ---
 
-## 🧠 Overview
+## Overview
 
 ### **Problem**
 
@@ -80,24 +80,6 @@ Read the [Next.js Deployment Guide](https://nextjs.org/docs/app/building-your-ap
 
 ---
 
-## 🧰 Learn More
-
-* [Next.js Documentation](https://nextjs.org/docs) – Core framework docs
-* [Learn Next.js](https://nextjs.org/learn) – Interactive tutorial
-* [Next.js GitHub Repo](https://github.com/vercel/next.js) – Contribute or report issues
-
----
-
-## 🧾 License
-
-This project is licensed under the **MIT License** – free for personal and commercial use.
-
----
-
 ### ✨ Summary
 
 > **VYNE** transforms ideas into real, production-grade websites powered by AI — enabling instant prototyping, faster iteration, and early user validation.
-
----
-
-Would you like me to add a **diagram (in Markdown or ASCII)** for the system architecture? It makes your README look more polished for recruiters or hackathon judges.
