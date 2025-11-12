@@ -28,6 +28,7 @@ import Conversation from "./Conversation/Conversation";
 import AiInput from "@/sections/Chat/AiInput";
 import FulllChatBoxComp from "./FulllChatBoxComp/FulllChatBoxComp";
 import Retry from "./Webcontainers/Retry";
+import LogoutButton from "@/app/auth/_components/LogoutButton";
 
 type AiFile = {
   path: string;
@@ -147,9 +148,10 @@ const Home = () => {
                   <TooltipContent>Preview</TooltipContent>
                 </Tooltip>
               </ButtonGroup>
-              <div>
+              <div className="flex gap-2">
                 {/* <Retry/> */}
                 <Deploy />
+                <LogoutButton />
               </div>
             </div>
 
