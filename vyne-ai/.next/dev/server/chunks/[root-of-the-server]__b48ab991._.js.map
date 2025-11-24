@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///Users/srijanpatel/Documents/vyne-ai/app/api/auth/logout/route.ts"],"sourcesContent":["import { NextResponse } from \"next/server\";\nimport { cookies } from \"next/headers\";\n\nexport async function POST() {\n    const cookieStore =await cookies();\n  \n  const res = NextResponse.json({ ok: true });\n  cookieStore.set({\n    name: \"token\",\n    value: \"\",\n    httpOnly: true,\n    secure: process.env.NODE_ENV === \"production\",\n    sameSite: \"lax\",\n    path: \"/\",\n    maxAge: 0,\n  });\n  return res;\n}\n\n\n"],"names":[],"mappings":";;;;AAAA;AACA;;;AAEO,eAAe;IAClB,MAAM,cAAa,MAAM,IAAA,4IAAO;IAElC,MAAM,MAAM,gJAAY,CAAC,IAAI,CAAC;QAAE,IAAI;IAAK;IACzC,YAAY,GAAG,CAAC;QACd,MAAM;QACN,OAAO;QACP,UAAU;QACV,QAAQ,oDAAyB;QACjC,UAAU;QACV,MAAM;QACN,QAAQ;IACV;IACA,OAAO;AACT","debugId":null}}]
+}

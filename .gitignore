@@ -1,7 +1,5 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
-/node_modules
+/node_modules                  # Ignore node_modules in the root and in subdirectories
 /.pnp
 .pnp.*
 .yarn/*
@@ -11,33 +9,38 @@
 !.yarn/versions
 
 # testing
-/coverage
+/coverage                      # Ignore coverage in the root and in subdirectories
 
-# next.js
-/.next/
-/out/
+# Next.js (applies to files inside the 'frontend' folder)
+/frontend/.next/               # Explicitly ignore .next in the frontend folder
+/frontend/out/                 # Explicitly ignore 'out' in the frontend folder
 
-# production
-/build
+# Production
+/build                         # Ignore 'build' in the root and subdirectories
 
-# misc
+# Misc
 .DS_Store
 *.pem
 
-# debug
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Env files (can opt-in for committing if needed)
 .env*
 
-# vercel
+# Vercel
 .vercel
 
-# typescript
+# Typescript
 *.tsbuildinfo
 next-env.d.ts
 
-/lib/generated/prisma
+# Prisma
+/frontend/lib/generated/prisma # Explicitly ignore the generated prisma client in frontend
+
+# --- Backend Additions (Assuming your backend is in a folder named 'backend') ---
+/backend/node_modules          # Explicitly ignore node_modules in the backend folder
+/backend/dist                  # Common output/compiled folder for backend (e.g., Express/NestJS)
