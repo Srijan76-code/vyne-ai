@@ -1,22 +1,11 @@
 # dependencies
-/node_modules                  # Ignore node_modules in the root and in subdirectories
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+/node_modules
 
 # testing
-/coverage                      # Ignore coverage in the root and in subdirectories
+/coverage
 
-# Next.js (applies to files inside the 'frontend' folder)
-/frontend/.next/               # Explicitly ignore .next in the frontend folder
-/frontend/out/                 # Explicitly ignore 'out' in the frontend folder
-
-# Production
-/build                         # Ignore 'build' in the root and subdirectories
+# production
+/build
 
 # Misc
 .DS_Store
@@ -28,7 +17,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Env files (can opt-in for committing if needed)
+# Env files
 .env*
 
 # Vercel
@@ -37,10 +26,3 @@ yarn-error.log*
 # Typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Prisma
-/frontend/lib/generated/prisma # Explicitly ignore the generated prisma client in frontend
-
-# --- Backend Additions (Assuming your backend is in a folder named 'backend') ---
-/backend/node_modules          # Explicitly ignore node_modules in the backend folder
-/backend/dist                  # Common output/compiled folder for backend (e.g., Express/NestJS)
