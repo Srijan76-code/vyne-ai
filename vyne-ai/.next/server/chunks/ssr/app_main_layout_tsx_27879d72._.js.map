@@ -1,1 +1,0 @@
-{"version":3,"sources":["turbopack:///[project]/app/main/layout.tsx"],"sourcesContent":["import React from \"react\";\n\nconst layout = ({\n  children,\n}: Readonly<{\n  children: React.ReactNode;\n}>) => {\n  return <div>{children}</div>;\n};\n\nexport default layout;\n"],"names":[],"mappings":"2EAEe,CAAC,UACd,CAAQ,CAGR,GACO,CAAA,EAAA,EAAA,GAAA,EAAC,MAAA,UAAK"}

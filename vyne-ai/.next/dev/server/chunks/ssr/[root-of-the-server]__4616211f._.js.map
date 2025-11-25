@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/srijanpatel/Documents/vyne-ai/app/profile/page.tsx"],"sourcesContent":["import React from 'react'\n\nconst page = () => {\n  return (\n    <div>\n        {/* USER + ACTIVITY */}\n        <div>\n            <div>\n                \n            </div>\n            <div></div>\n        </div>\n\n        {/* PROJECTS */}\n        <div></div>\n    </div>\n  )\n}\n\nexport default page"],"names":[],"mappings":";;;;;;AAEA,MAAM,OAAO;IACX,qBACE,8OAAC;;0BAEG,8OAAC;;kCACG,8OAAC;;;;;kCAGD,8OAAC;;;;;;;;;;;0BAIL,8OAAC;;;;;;;;;;;AAGT;uCAEe","debugId":null}}]
-}

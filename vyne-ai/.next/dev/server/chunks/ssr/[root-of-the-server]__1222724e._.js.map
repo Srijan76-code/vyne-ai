@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/srijanpatel/Documents/vyne-ai/app/page.tsx"],"sourcesContent":["import HeroBg from '@/sections/Hero/HeroBg'\nimport React from 'react'\n\nconst page = () => {\n  return (\n    <div  className=''\n\n      \n      >\n        \n      {/* <HeroBg /> */}\n      {/* <div>hello</div> */}\n    </div>\n  )\n}\n\nexport default page\n"],"names":[],"mappings":";;;;;;AAGA,MAAM,OAAO;IACX,qBACE,8OAAC;QAAK,WAAU;;;;;;AASpB;uCAEe","debugId":null}}]
-}

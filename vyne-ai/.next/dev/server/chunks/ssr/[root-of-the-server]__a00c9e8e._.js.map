@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/srijanpatel/Documents/vyne-ai/app/auth/signup/page.tsx"],"sourcesContent":["import React from 'react'\nimport SignUpComp from './_components/SignUpComp'\n\nconst page = () => {\n  return (\n    <div className='w-full'><SignUp Comp/></div>\n  )\n}\n\nexport default page"],"names":[],"mappings":";;;;;;AAGA,MAAM,OAAO;IACX,qBACE,8OAAC;QAAI,WAAU;kBAAS,cAAA,8OAAC;YAAO,IAAI;;;;;;;;;;;AAExC;uCAEe","debugId":null}}]
-}

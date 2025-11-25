@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ProjectSchema } from "@/app/api/vyne/schema";
+import { ProjectSchema } from "@/app/_api/vyne/schema";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import {
