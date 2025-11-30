@@ -44,21 +44,27 @@ const HeroBg = () => {
       >
         <img src="/main/image.png" alt="" />
       </div>
-
       <img
         ref={revealImgRef}
         src="/hero_bg.png"
         alt="Reveal effect"
-        className="absolute w-full  z-[5] opacity-30 pointer-events-none"
         style={{
+          position: "absolute",
+          width: "100%",
+          top: "-50%",
+          zIndex: 5,
           mixBlendMode: "lighten",
+          opacity: 0.3,
+          pointerEvents: "none",
+          "--mx": "-9999px",
+          "--my": "-9999px",
           WebkitMaskImage:
             "radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,1) 0px, rgba(255,255,255,0.95) 60px, rgba(255,255,255,0.6) 120px, rgba(255,255,255,0.25) 180px, rgba(255,255,255,0) 240px)",
           maskImage:
             "radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,1) 0px, rgba(255,255,255,0.95) 60px, rgba(255,255,255,0.6) 120px, rgba(255,255,255,0.25) 180px, rgba(255,255,255,0) 240px)",
           WebkitMaskRepeat: "no-repeat",
           maskRepeat: "no-repeat",
-        } as React.CSSProperties & { "--mx"?: string; "--my"?: string }}
+        }}
       />
     </div>
   );

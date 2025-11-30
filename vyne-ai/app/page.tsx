@@ -1,16 +1,13 @@
-import HeroBg from '@/sections/Hero/HeroBg'
-import React from 'react'
+import Hero from "./_components/Hero";
+import Features from "./_components/LandingPage/Features/Features";
 
 const page = () => {
   return (
-    <div  className=''
-
-      
-      >
-      <HeroBg />
-      {/* <div>hello</div> */}
+    <div className="">
+      <Hero />
+      <Features />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

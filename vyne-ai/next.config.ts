@@ -28,6 +28,9 @@ const nextConfig: NextConfig = {
       ],
     };
   },
+    env: {
+    JWT_SECRET: process.env.JWT_SECRET,  // makes it available to middleware
+  },
 };
 
 export default nextConfig;

@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef, useState, type MouseEventHandler, type ReactNode } from 'react';
 
 type HoverButtonProps = {

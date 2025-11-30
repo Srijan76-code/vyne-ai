@@ -24,21 +24,81 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const getUserProjects = async (req: Request, res: Response) => {
-  const { userId } = req.query;
-
+  
   try {
-    const userInfo = await prisma.user.findUnique({
-      where: {
-        id: Number(userId),
+
+    let {
+      userId="",
+      page = "1",
+      limit = "9",
+      filter = "Likes",
+      order = "desc",
+      search = "",
+    } = req.query;
+
+    if (!userId || isNaN(Number(userId))) {
+  return res.status(400).json({ error: "Invalid or missing userId" });
+}
+
+
+    
+
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+
+    const projects = await prisma.project.findMany({
+      skip: (pageNum - 1) * limitNum,
+      take: limitNum,
+      orderBy: {
+        [filter as string]: order as "asc" | "desc",
       },
-      include: {
-        projects: true,
+      where: {
+        userId: Number(userId),
+        ...(search
+          ? {
+              title: {
+                contains: search as string,
+                mode: "insensitive",
+              },
+            }
+          : {}),
+      },
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        Likes: true,
+        Clones: true,
+        user: true,
       },
     });
 
-    return res.json(userInfo);
+    const total = await prisma.project.count({
+      where: {
+        userId: Number(userId),
+        ...(search
+          ? {
+              title: {
+                contains: search as string,
+                mode: "insensitive",
+              },
+            }
+          : {}),
+      },
+    });
+
+   
+
+    return res.json({
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+      projects,
+    });
   } catch (error) {
-    return res.status(400).send("Project fetch failed");
+    console.error(error);
+    return res.status(500).send("Project fetch failed");
   }
 };
 

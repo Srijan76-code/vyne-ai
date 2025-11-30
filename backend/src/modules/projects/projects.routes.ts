@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { getAllProjects } from "./projects.controller";
+import { getProjectById,getAllProjects } from "./projects.controller";
 
 const router = Router();
 
 router.get("/", getAllProjects);
+router.get("/:id", getProjectById);
+
 
 export default router;

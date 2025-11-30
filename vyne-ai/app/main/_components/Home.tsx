@@ -20,7 +20,6 @@ import {
 import { CodeXml, Eye } from "lucide-react";
 import { useStatus } from "@/store/useStatus";
 
-
 import ShinyText from "@/components/ShinyText";
 import ChatBox from "./ChatBox/ChatBox";
 import useChatStore from "@/store/useChatStore";
@@ -29,6 +28,25 @@ import AiInput from "@/sections/Chat/AiInput";
 import FulllChatBoxComp from "./FulllChatBoxComp/FulllChatBoxComp";
 import Retry from "./Webcontainers/Retry";
 import LogoutButton from "@/app/auth/_components/LogoutButton";
+import { CirclePlus, LogOut, User, Users, Users2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { HoverButton } from "@/components/Buttons/HoverButton";
 
 type AiFile = {
   path: string;
@@ -87,7 +105,9 @@ const Home = () => {
           {" "}
           {/* 30% width */}
           <FulllChatBoxComp
-            object={object as { files?: AiFile[]; summary?: string } | undefined}
+            object={
+              object as { files?: AiFile[]; summary?: string } | undefined
+            }
             submit={submit}
             isLoading={isLoading}
             stop={stop}
@@ -148,11 +168,60 @@ const Home = () => {
                   <TooltipContent>Preview</TooltipContent>
                 </Tooltip>
               </ButtonGroup>
-              <div className="flex gap-2">
-                {/* <Retry/> */}
-                <Deploy />
-                <LogoutButton />
+
+        <div className="flex  gap-5">
+          <Deploy/>
+          <Link href="/main">
+            <HoverButton >
+              <div className="flex gap-2 items-center">
+                <CirclePlus className="w-4 h-4" />
+                <p>New project</p>
               </div>
+            </HoverButton>
+          </Link>
+
+          <Link href="/community">
+            <HoverButton>
+              <div className="flex gap-2 items-center">
+                <Users className="w-4 h-4" />
+                <p>Community</p>
+              </div>
+            </HoverButton>
+          </Link>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+
+              <div
+                className="w-8 h-8 cursor-pointer inset-0  rounded-full "
+                style={{
+                  backgroundImage: `
+       radial-gradient(circle at center, #8249fc, transparent)        
+     `,
+                }}
+              ></div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-full bg-black" align="start">
+              <DropdownMenuItem>
+                <Link href="/profile">
+                  <div className="flex gap-2 items-center">
+                    <User className="w-4 h-4" />
+                    <p>Profile</p>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+                <div className="flex text-red-500 gap-2 items-center">
+                  <LogOut className="w-4 text-red-500 h-4" />
+                  <p>Logout</p>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+
             </div>
 
             <div className="w-full h-full">
@@ -176,13 +245,18 @@ const Home = () => {
                         messages[messages.length - 1]?.role === "assistant" ? (
                           <MainExplorer
                             object={
-                              typeof messages[messages.length - 1]?.content === "object"
-                                ? (messages[messages.length - 1].content as { files: AiFile[] })
+                              typeof messages[messages.length - 1]?.content ===
+                              "object"
+                                ? (messages[messages.length - 1].content as {
+                                    files: AiFile[];
+                                  })
                                 : undefined
                             }
                           />
                         ) : (
-                          <MainExplorer object={object as unknown as { files: AiFile[] }} />
+                          <MainExplorer
+                            object={object as unknown as { files: AiFile[] }}
+                          />
                         )}
                       </Panel>
 
@@ -198,7 +272,10 @@ const Home = () => {
                 </PanelGroup>
               ) : (
                 <Panel>
-                  <WebContainers object={object as unknown as { files: AiFile[] }} isLoading={isLoading} />
+                  <WebContainers
+                    object={object as unknown as { files: AiFile[] }}
+                    isLoading={isLoading}
+                  />
                 </Panel>
               )}
             </div>
