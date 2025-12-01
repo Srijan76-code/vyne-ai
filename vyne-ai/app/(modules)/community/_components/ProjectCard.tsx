@@ -1,9 +1,12 @@
-import { Dot, Heart, Users } from "lucide-react";
+"use client";
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { Dot, Heart, Loader, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import Hamburger from "./Hamburger";
-
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 interface ProjectCardProps {
   id: string;
   title: string;
@@ -11,6 +14,7 @@ interface ProjectCardProps {
   Likes: number;
   Clones: number;
   user?: {
+    id: number;
     image: string | null;
   };
 }
@@ -21,60 +25,126 @@ const ProjectCard = ({
   createdAt,
   Likes,
   Clones,
-  user,
+  user: owner,
 }: ProjectCardProps) => {
+  const [likes, setLikes] = useState(Likes);
+  const [liked, setLiked] = useState(false);
+  const { user: authUser } = useAuthStore();
+  const [loading, setLoading] = useState(false);
+  const [cloneLoading, setCloneLoading] = useState(false);
+
+  const router = useRouter();
+
+  async function changeLike() {
+    setLoading(true);
+    const res = await fetch("/api/projects/like", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ projectId: id, userId: authUser?.id }),
+    });
+
+    const data: { liked: boolean } = await res.json();
+
+    if (data.liked) {
+      setLiked(true);
+      setLikes((x) => x + 1);
+    } else {
+      setLiked(false);
+      setLikes((x) => Math.max(0, x - 1));
+    }
+    setLoading(false);
+  }
+
+  async function cloneProject() {
+    setCloneLoading(true);
+    const res = await fetch("/api/projects/clone", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ projectId: id, userId: authUser?.id }),
+    });
+
+    const data: { success: boolean; alreadyCloned: boolean } = await res.json();
+
+    if (data.success) {
+      setCloneLoading(false);
+      router.push(`/main/${id}`);
+    }
+  }
+
+  if (cloneLoading) {
+    return (
+        <p className="flex w-full items-center justify-center">
+          <Spinner variant="ring" size={32} />
+        </p>
+    );
+  }
+
   return (
+
     <div className="flex flex-col  gap-2  ">
-      <Link target="_blank" href={`/remix/${id}`}>
-        <div
-          className="w-96 h-60 rounded-md   border-neutral-000 border "
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(120, 180, 255, 0.25), transparent 70%), #000000",
-          }}
-        >
-          {/* <Image
+
+      <button
+        disabled={cloneLoading}
+        onClick={cloneProject}
+        className="w-96 h-60 rounded-md cursor-pointer   border-neutral-000 border "
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(120, 180, 255, 0.25), transparent 70%), #000000",
+        }}
+      >
+        {/* <Image
           src="/placeholder.png"
           alt="Project Image"
           width={200}
           height={200}
         /> */}
-        </div>
-      </Link>
+      </button>
 
       <div className="flex gap-4 items-center">
+        <div className="text-sm  w-full">
+          <p className=""> {title}</p>
 
-        <div className="text-sm">
-          <p>{title}</p>
-          <div className="flex items-center text-neutral-400  gap-1">
-            <div className="flex items-center gap-1">
+          <div className="flex items-center  text-neutral-400  gap-1">
+            {loading ? (
               <p>
-                <Heart className="w-4 h-4" />
+                <Spinner variant="ring" size={18} />
               </p>
-              <p> {Likes}</p>
-            </div>
-
+            ) : (
+              <button
+                type="button"
+                onClick={changeLike}
+                disabled={loading}
+                className="flex cursor-pointer items-center gap-1"
+              >
+                <p>
+                  <Heart
+                    className={`w-4 h-4 ${liked && "fill-muted-foreground  "}`}
+                  />
+                </p>
+                <p> {likes}</p>
+              </button>
+            )}
             <div>
               <Dot className="w-4 h-4" />
             </div>
 
             <div className="flex items-center gap-1">
               <p>
-                <Users className="w-4 h-4" />
+                <Users className="w-4  h-4" />
               </p>
               <p> {Clones}</p>
             </div>
 
-            {/* <div>
+            <div>
               <Dot className="w-4 h-4" />
-            </div> */}
+            </div>
 
-            {/* <div>{createdAt}</div> */}
+            <div className="text-muted-foreground">{createdAt}</div>
           </div>
-        </div>
-
-        <div className="ml-auto ">
-          <Hamburger />
         </div>
       </div>
     </div>

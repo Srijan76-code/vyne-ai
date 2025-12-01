@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
-import ProjectCard from "../../community/_components/ProjectCard";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import Filter2 from "./Filter2";
 import SearchProject2 from "./SearchProject2";
 import { PaginationComp2 } from "./PaginationComp2";
+import ProjectCard from "./ProjectCard";
 
 interface CommunityProject {
   id: string;
@@ -22,7 +22,7 @@ interface CommunityProject {
   };
 }
 const FilterProjects = () => {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
 
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("Likes");
@@ -57,7 +57,7 @@ const FilterProjects = () => {
     let active = true;
     setLoading(true);
 
-    const fetchProjects = async () => {
+    const fetchUserProjects = async () => {
       const response = await fetch(
         `/api/user/projects?userId=${user.id}&filter=${filter}&page=${page}&limit=${limit}&search=${debouncedSearch}`
       );
@@ -72,24 +72,23 @@ const FilterProjects = () => {
       setLoading(false);
     };
 
-    fetchProjects();
+    fetchUserProjects();
 
     return () => {
       active = false;
     };
-  }, [filter, page, debouncedSearch,user?.id]);
-
+  }, [filter, page, debouncedSearch, user?.id]);
 
   if (!user) {
-  return (
-    <div className="flex justify-center items-center h-64">
-      <Spinner variant="ring" size={32} />
-    </div>
-  );
-}
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Spinner variant="ring" size={32} />
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div className="mt-4">
       {/* Filters */}
       <div className="flex bg-black items-center justify-between gap-2">
         <div className="text-neutral-400 font-light flex items-center gap-2">
@@ -103,14 +102,23 @@ const FilterProjects = () => {
 
       <Separator className="mb-8 mt-8" />
 
-      {/* Community Projects */}
-      <p className="pb-4">Projects</p>
+      
+      {/* User Projects */}
+      {/* <p className="pb-4">Projects</p> */}
       <div className="flex bg-black  items-center  flex-wrap gap-8">
         {loading ? (
           <div className="pt-16 flex w-full justify-center items-center ">
             <Spinner variant="ring" size={32} />
           </div>
-        ) : (
+        ) : ( (!communityProjects || communityProjects.length == 0) ? (
+          <div className="flex w-full flex-col items-center  gap-8 justify-center">
+            <div className="w-64 ">
+              <img src="/community/community.png" alt="AI" />
+            </div>
+
+            <p className="text-muted-foreground">No user projects found</p>
+          </div>
+        ) : ( 
           communityProjects.map((project) => (
             <ProjectCard
               id={project.id}
@@ -122,7 +130,7 @@ const FilterProjects = () => {
               user={project.user}
             />
           ))
-        )}
+        ))}
       </div>
 
       <Separator className="mb-12 mt-12" />

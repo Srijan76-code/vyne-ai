@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 interface CardData {
   id: number | string;
-  video: string;
+  src: string;
   alt?: string;
 }
 
@@ -28,7 +28,7 @@ const StickyCard002 = ({
   imageClassName,
 }: StickyCard002Props) => {
   const container = useRef(null);
-  const imageRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   useGSAP(
     () => {
@@ -107,20 +107,17 @@ const StickyCard002 = ({
       <div className="sticky-cards relative flex h-screen w-full items-center justify-center overflow-hidden p-3 lg:p-8">
         <div
           className={cn(
-            "relative  h-[80vh] w-[90vw] max-w-sm overflow-hidden rounded-lg sm:max-w-md md:max-w-5xl lg:max-w-7xl ",
+            "relative  h-[80vh] w-[95vw] max-w-sm overflow-hidden rounded-lg sm:max-w-md md:max-w-5xl lg:max-w-7xl ",
             containerClassName
           )}
         >
           {cards.map((card, i) => (
-            <video
-            autoPlay
-            muted
-            loop
+            <img
               key={card.id}
-              src={card.video}
+              src={card.src}
 
               className={cn(
-                "rounded-4xl absolute h-full w-full object-fill",
+                "rounded-4xl absolute h-full w-full object-cover",
                 imageClassName
               )}
               ref={(el) => {

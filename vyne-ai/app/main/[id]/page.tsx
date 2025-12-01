@@ -1,4 +1,5 @@
-import React from "react";
+import RemixHome from "./_components/RemixHome";
+
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
@@ -6,11 +7,13 @@ const page = async ({ params }: { params: { id: string } }) => {
     cache: "no-store",
   });
 
-  const data = await res.json();
+  const project = await res.json();
 
-  console.log(data);
+  console.log(project);
 
-  return <div>page with id {id}</div>;
+  return <div>
+    <RemixHome project={project}/>
+  </div>;
 };
 
 export default page;

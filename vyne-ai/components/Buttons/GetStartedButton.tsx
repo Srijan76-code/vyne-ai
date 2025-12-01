@@ -1,6 +1,6 @@
 
 
-const GetStartedButton = ({ children,handleclick=()=>{},bg="bg-[#17132c]" }: { children: React.ReactNode; handleclick?: () => void; bg?: string }) => {
+const GetStartedButton = ({ children,handleclick=()=>{},bg="bg-transparent" }: { children: React.ReactNode; handleclick?: () => void; bg?: string }) => {
     return (
       <button onClick={handleclick}
         type="submit"

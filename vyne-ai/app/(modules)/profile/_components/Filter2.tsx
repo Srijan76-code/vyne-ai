@@ -37,7 +37,7 @@ const Filter2 = ({ setFilter, filter }: FilterProps) => {
         <SelectGroup>
           <SelectLabel>Filter</SelectLabel>
           {items.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
+            <SelectItem className=" cursor-pointer " key={item.value} value={item.value}>
               {item.label}
             </SelectItem>
           ))}

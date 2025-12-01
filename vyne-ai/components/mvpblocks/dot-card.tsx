@@ -26,10 +26,59 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger,  
 } from "../ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { Spinner } from "../ui/spinner";
 export default function DotCard() {
+  const [userId,setUserId] = useState("")
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [website, setWebsite] = useState("");
+  const [contacts, setContacts] = useState("");
+  const [avatar, setAvatar] = useState("/userProfile/new2.png");
+  const [background, setBackground] = useState("/userProfile/new2.png");
+
+
+const [loading,setLoading] = useState(false)
   const { user } = useAuthStore();
+
+  
+    useEffect(() => {
+      if (!user?.id) return;
+
+      setLoading(true);
+  
+      const fetchUserData = async () => {
+        const response = await fetch(
+          `/api/user?userId=${user.id}`
+        );
+  
+        const data = await response.json();
+        setUserId(data.id);
+        setName(data.name);
+        setUsername(data.username);
+        setBio(data.bio);
+        setWebsite(data.website);
+        setContacts(data.contacts);
+        setAvatar(data.image);
+        setLoading(false);
+      };
+  
+      fetchUserData();
+  
+    }, [user?.id]);
+
+      if (!user) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <Spinner variant="ring" size={32} />
+        </div>
+      );
+  
+    }
+  
   return (
     <div className="relative mx-auto w-full max-w-sm rounded-lg border border-dashed border-zinc-300 px-4 sm:px-6 md:px-8 dark:border-zinc-800">
       <div className="absolute top-4 left-0 -z-0 h-px w-full bg-zinc-400 sm:top-6 md:top-8 dark:bg-zinc-700" />
@@ -107,8 +156,8 @@ export default function DotCard() {
                 </div>
 
                 <div>
-                  <p>Srijan Patel</p>
-                  <p className="text-muted-foreground "> @srijan</p>
+                  <p>{name}</p>
+                  <p className="text-muted-foreground "> @{username}</p>
                 </div>
               </div>
 
@@ -116,7 +165,7 @@ export default function DotCard() {
                 <TooltipProvider delayDuration={0}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <a href="hover:text-primary">
+                      <a target="_blank" href={`https://${website}`} className="hover:text-primary">
                         <ExternalLinkIcon className="w-4 h-4  text-muted-foreground hover:text-primary" />
                       </a>
                     </TooltipTrigger>
@@ -131,25 +180,26 @@ export default function DotCard() {
                 <TooltipProvider delayDuration={0}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <a href="">
+                      <a target="_blank" href={contacts}>
                         <Link className="w-4 h-4 text-muted-foreground hover:text-primary" />
                       </a>
                     </TooltipTrigger>
                     <TooltipContent className="dark px-2 py-1 text-xs">
-                      Twitter/X
+                      Linkedin
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
 
                 <p className="text-muted-foreground">|</p>
-                <UserEditProfile />
+               {userId && 
+                <UserEditProfile id={userId} setMainName={setName} setMainUsername={setUsername} setMainWebsite={setWebsite} setMainContacts={setContacts} setMainBio={setBio} setMainAvatar={setAvatar}   mainName={name} mainUsername={username} mainWebsite={website} mainContacts={contacts} mainBio={bio} mainAvatar={avatar} />
+               }
               </div>
             </div>
 
             <div className="text-sm p-2  ">
               <p>
-                A Full-Stack developer motivated by the limitless power of
-                programming.
+                {bio}
               </p>
             </div>
           </div>

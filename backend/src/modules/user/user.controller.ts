@@ -3,32 +3,48 @@ import { prisma } from "../../config/prisma";
 import { verifyToken } from "../../lib/jwt";
 
 export const getUser = async (req: Request, res: Response) => {
-  const token =
-    req.cookies.token || req.headers.authorization?.split(" ")[1];
-  if (!token)
-    return res.status(401).json({ error: "Unauthorized" });
+  const { userId } = req.query;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    return res.json(user);
+  } catch (e) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  const { userId } = req.query;
+  const { name, username, image, bio, website, contacts, prompts } = req.body;
 
   try {
-    const payload = await verifyToken(token);
-    const userId = (payload as any).id;
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, email: true, createdAt: true },
+    const user = await prisma.user.update({
+      where: { id: Number(userId) },
+      data: {
+        name,
+        username,
+        image,
+        bio,
+        website,
+        contacts,
+        prompts,
+      },
     });
-    if (!user)
-      return res.status(404).json({ error: "User not found" });
-    return res.json({ user });
+    if (!user) return res.status(404).json({ error: "User not found" });
+    return res.json({ success: true });
   } catch (e) {
-    return res.status(403).json({ error: "Invalid token" });
+    console.log(e);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const getUserProjects = async (req: Request, res: Response) => {
-  
   try {
-
     let {
-      userId="",
+      userId = "",
       page = "1",
       limit = "9",
       filter = "Likes",
@@ -37,11 +53,8 @@ export const getUserProjects = async (req: Request, res: Response) => {
     } = req.query;
 
     if (!userId || isNaN(Number(userId))) {
-  return res.status(400).json({ error: "Invalid or missing userId" });
-}
-
-
-    
+      return res.status(400).json({ error: "Invalid or missing userId" });
+    }
 
     const pageNum = Number(page);
     const limitNum = Number(limit);
@@ -87,8 +100,6 @@ export const getUserProjects = async (req: Request, res: Response) => {
       },
     });
 
-   
-
     return res.json({
       total,
       page: pageNum,
@@ -128,11 +139,83 @@ export const updateProject = async (req: Request, res: Response) => {
         id: Number(reqBody.id),
       },
       data: {
-        ...reqBody,
+        title: reqBody.title,
       },
     });
-    return res.status(201).json(updatedProject);
+    return res.status(201).json({ success: true });
   } catch (error) {
     return res.status(400).send("Project creation failed");
+  }
+};
+export const clonedProjects = async (req: Request, res: Response) => {
+  let {
+    userId = "",
+    page = "1",
+    limit = "9",
+    filter = "Likes",
+    order = "desc",
+    search = "",
+  } = req.query;
+
+  if (!userId || isNaN(Number(userId))) {
+    return res.status(400).json({ error: "Invalid or missing userId" });
+  }
+
+  const pageNum = Number(page);
+  const limitNum = Number(limit);
+
+  try {
+    const clonedProjects = await prisma.projectClone.findMany({
+      where: {
+        userId: Number(userId),
+        project: {
+          ...(search
+            ? {
+                title: {
+                  contains: search as string,
+                  mode: "insensitive",
+                },
+              }
+            : {}),
+        },
+      },
+      skip: (pageNum - 1) * limitNum,
+      take: limitNum,
+      orderBy: {
+        project: {
+          [filter as string]: order as "asc" | "desc", // FIXED
+        },
+      },
+      include: {
+        project: true,
+      },
+    });
+
+    const total = await prisma.projectClone.count({
+      where: {
+        userId: Number(userId),
+        project: {
+          ...(search
+            ? {
+                title: {
+                  contains: search as string,
+                  mode: "insensitive",
+                },
+              }
+            : {}),
+        },
+      },
+    });
+
+    return res.json({
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+      clonedProjects,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Cloned projects fetch failed");
   }
 };

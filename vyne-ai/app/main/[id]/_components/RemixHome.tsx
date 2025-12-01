@@ -72,7 +72,7 @@ interface Project {
 
 // isLoading-> true when generating
 // isLoading-> false when ready
-const Home = ({project}: {project: Project}) => {
+const RemixHome = ({project}: {project: Project}) => {
   const initialized = useRef(false);
   const [tab, setTab] = useState(0);
   const { status, setStatus } = useStatus();
@@ -304,7 +304,7 @@ useEffect(() => {
               ) : (
                 <Panel>
                   <WebContainers
-                    object={object as unknown as { files: AiFile[] }}
+                    object={project.content as unknown as { files: AiFile[] }}
                     isLoading={isLoading}
                   />
                 </Panel>
@@ -317,4 +317,4 @@ useEffect(() => {
   );
 };
 
-export default Home;
+export default RemixHome;

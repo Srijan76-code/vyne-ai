@@ -279,7 +279,7 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
     return (
       <div className="h-dvh p-2 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-6xl mb-4">🤖</div>
+          {/* <div className="animate-pulse text-6xl mb-4">🤖</div> */}
           <p className="text-gray-500 text-lg">AI is generating files...</p>
           <p className="text-gray-400 text-sm mt-2">
             {object?.files?.length || 0} files received so far
@@ -356,14 +356,14 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
     return (
       <div className="h-dvh p-2 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin text-6xl mb-4">⚙️</div>
+          {/* <div className="animate-spin text-6xl mb-4">⚙️</div> */}
           <p className="text-gray-500 text-lg">Setting up project...</p>
           <p className="text-gray-400 text-sm mt-2">
             Installing {object.files.length} files
           </p>
 
           {installLogs.length > 0 && (
-            <div className="mt-4 bg-black p-3 rounded text-xs text-gray-400 max-w-md mx-auto max-h-32 overflow-auto text-left">
+            <div className="mt-4 bg-transparent p-3 rounded text-xs text-gray-400 max-w-md mx-auto max-h-32 overflow-auto text-left">
               {installLogs.slice(-5).map((log, i) => (
                 <div key={i}>{log}</div>
               ))}

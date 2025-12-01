@@ -1,37 +1,155 @@
 "use client";
 
+import { Mouse } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
+import { motion } from "framer-motion";
+
+import { HoverButton } from "@/components/Buttons/HoverButton";
+import StaggerFadeRise from "./animations/StaggerFadeRise";
+import { staggerItemVariants } from "./animations/variants";
+import Beams from "@/components/Beams";
+import GetStartedButton from "@/components/Buttons/GetStartedButton";
 const Hero = () => {
   return (
-    <div className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black">
-      {/* Background Video */}
-      <video
-        className="absolute inset-0 h-full w-full object-cover opacity-80"
-        src="/landingPage/loopbg.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-
-      {/* Hero Text */}
-      <div className="relative z-20 flex flex-col items-center justify-center w-full text-center">
-        <h1
-          className="font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white/0 via-white/30  to-white    whitespace-nowrap"
-          style={{ fontSize: "120px", lineHeight: "1" }}
+    <StaggerFadeRise className=" ">
+      <div style={{ width: "100%", height: "100vh", position: "relative" }}>
+        {/* Navbar */}
+        <motion.nav
+          variants={staggerItemVariants}
+          className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-4"
         >
-          Build & Deploy Beautiful
-        </h1>
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <Image
+              src="/vercel.svg"
+              alt="PixLyne Logo"
+              width={42}
+              height={42}
+              className="drop-shadow-[0_0_10px_rgba(0,255,195,0.4)] w-4 h-4"
+            />
+            <p className="text-neutral-300 font-raleway font-semibold text-xl ">
+              Vyne-Ai
+            </p>
+          </div>
 
-        <h1
-          className="font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white/0 via-white/30 to-white whitespace-nowrap"
-          style={{ fontSize: "120px", lineHeight: "1" }}
-        >
-          Websites Faster
-        </h1>
+          {/* Modern Hover Button */}
+          {/* <Cta> */}
+          <HoverButton
+            glowColor="#2667ff"
+            backgroundColor="#0d0d0d"
+            textColor="#ffffff"
+            hoverTextColor="#ffffff"
+            className="  text-sm font-light "
+          >
+            SignIn
+          </HoverButton>
+          {/* </Cta> */}
+        </motion.nav>
+
+        {/* Hero Content */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center z-40 text-center px-4">
+          {/* Section 1: Tagline Badge */}
+          <motion.div variants={staggerItemVariants} className="mb-9 ">
+            <div className="relative inline-flex items-center justify-center rounded-[30px] bg-black p-[1px] shadow-lg">
+              <div className="relative backdrop-blur-[60px] bg-black/70 rounded-[24px] px-4 py-2 flex items-center justify-center gap-2 border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <span className="absolute left-3 h-[6px] w-[6px] rounded-full bg-[#2c74f9] shadow-[0_0_14px_2px_#2c74f9] animate-pulse" />
+                <p className="text-neutral-200 text-xs font-medium font-raleway z-10 pl-4 tracking-wide">
+                  Turning Ideas into Reality
+                </p>
+                <div className="absolute inset-0 rounded-[24px] bg-[linear-gradient(105deg,rgba(255,255,255,0.1)_-20%,rgba(0,0,0,0)_25%)] pointer-events-none animate-[shine_2s_infinite]" />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Section 2: Headline */}
+          <motion.div
+            variants={staggerItemVariants}
+            className="flex flex-col items-center space-y-1 text-neutral-300"
+          >
+            <h1 className="font-medium text-center font-raleway">
+              <span className="block text-8xl tracking-tight leading-none">
+                Create Stunning{" "}
+                <span className="italic text-blue-500 font-instrument-serif">
+                  Websites
+                </span>
+              </span>
+              <span className="block text-8xl tracking-tight leading-none mt-2">
+                With Every{" "}
+                <span className="italic text-blue-500 font-instrument-serif">
+                  Prompt
+                </span>
+              </span>
+            </h1>
+          </motion.div>
+
+
+          <motion.div className="mt-16" variants={staggerItemVariants}>
+            <GetStartedButton>Get Started</GetStartedButton>
+          </motion.div>
+
+          <div className="mt-20 flex flex-col items-center font-raleway">
+            <motion.div
+              variants={staggerItemVariants}
+              className="flex items-center justify-center gap-3 text-neutral-300"
+            >
+              <p>Scroll down</p>
+              <div className="w-40 h-px bg-white/30"></div>
+              <Mouse className="animate-smoothFloat" fill="grey" />
+              <div className="w-40 h-px bg-white/30"></div>
+              <p>to see projects</p>
+            </motion.div>
+          
+          </div>
+        </div>
+
+        <style jsx>{`
+          @keyframes shine {
+            0% {
+              background-position: -200% 0;
+            }
+            100% {
+              background-position: 200% 0;
+            }
+          }
+          .animate-[shine_2s_infinite] {
+            background-size: 200% 100%;
+            animation: shine 2s infinite linear;
+          }
+
+          /* Global smooth float animation for Mouse icon */
+          :global(.animate-smoothFloat) {
+            display: inline-block;
+            animation: smoothFloat 2.5s ease-in-out infinite;
+          }
+
+          @keyframes smoothFloat {
+            0%,
+            100% {
+              transform: translateY(0);
+              opacity: 1;
+            }
+            50% {
+              transform: translateY(-8px);
+              opacity: 0.9;
+            }
+          }
+        `}</style>
+
+        {/* Beams Background */}
+        <Beams
+          beamWidth={2}
+          beamHeight={60}
+          beamNumber={12}
+          lightColor="#669cff"
+          speed={3}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={30}
+        />
       </div>
-    </div>
+    </StaggerFadeRise>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import ProjectCard from "./_components/ProjectCard";
+
 import { communityProjects } from "@/data/communityProjects";
 import Filter from "./_components/Filter";
 import { FilterIcon } from "lucide-react";

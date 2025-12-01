@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import Filter from "./Filter";
 import SearchProject from "./SearchProject";
 import { Separator } from "@/components/ui/separator";
-import ProjectCard from "./ProjectCard";
+
 import { Spinner } from "@/components/ui/spinner";
 import { PaginationComp } from "./PaginationComp";
+import ProjectCard from "./ProjectCard";
 
 interface CommunityProject {
   id: string;
@@ -93,7 +94,15 @@ const FilterCommunity = () => {
           <div className="pt-16 w-full flex justify-center items-center ">
             <Spinner variant="ring" size={32} />
           </div>
-        ) : (
+        ) : ( (!communityProjects || communityProjects.length == 0) ? (
+          <div className="flex w-full flex-col items-center  gap-8 justify-center">
+            <div className="w-64 ">
+              <img src="/community/community.png" alt="AI" />
+            </div>
+
+            <p className="text-muted-foreground">No community projects found</p>
+          </div>
+        ) : ( 
           communityProjects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -105,7 +114,7 @@ const FilterCommunity = () => {
               user={project.user}
             />
           ))
-        )}
+        ))}
       </div>
 
       <Separator className="mb-12 mt-12" />

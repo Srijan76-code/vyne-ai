@@ -1,7 +1,7 @@
 "use client";
 
-import { CheckIcon, ImagePlusIcon, PencilIcon, XIcon } from "lucide-react";
-import { useId } from "react";
+import { CheckIcon, ImagePlusIcon, Linkedin, PencilIcon, XIcon } from "lucide-react";
+import { useId, useState } from "react";
 
 import { useCharacterLimit } from "@/hooks/use-character-limit";
 import { useFileUpload } from "@/hooks/use-file-upload";
@@ -22,7 +22,12 @@ import { Textarea } from "@/components/ui/textarea";
 import UserContactInput from "./UserContactInput";
 import { Separator } from "@/components/ui/separator";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Pretend we have initial image files
 const initialBgImage = [
@@ -44,10 +49,34 @@ const initialAvatarImage = [
     url: "/userProfile/new2.png",
   },
 ];
+interface UserProfile {
+  id:string;
+  mainName: string;
+  mainUsername: string;
+  mainBio: string;
+  mainWebsite: string;
+  mainContacts: string;
+  mainAvatar: string;
 
-export default function UserEditProfile() {
-  const id = useId();
+  setMainName: (name: string) => void;
+  setMainUsername: (username: string) => void;
+  setMainBio: (bio: string) => void;
+  setMainWebsite: (website: string) => void;
+  setMainContacts: (contacts: string) => void;
+  setMainAvatar: (avatar: string) => void;
 
+}
+
+
+export default function UserEditProfile({id, mainName,mainUsername,mainBio,mainWebsite,mainContacts,mainAvatar,setMainName,setMainUsername,setMainBio,setMainWebsite,setMainContacts,setMainAvatar}:UserProfile) {
+  const [name, setName] = useState(mainName);
+  const [username, setUsername] = useState(mainUsername);
+  const [bio, setBio] = useState(mainBio);
+  const [website, setWebsite] = useState(mainWebsite);
+  const [contacts, setContacts] = useState(mainContacts);
+  const [avatar, setAvatar] = useState(mainAvatar);
+
+  
   const maxLength = 180;
   const {
     value,
@@ -55,33 +84,57 @@ export default function UserEditProfile() {
     handleChange,
     maxLength: limit,
   } = useCharacterLimit({
-    initialValue:
-      "Hey, I am Margaret, a web developer who loves turning ideas into amazing websites!",
+    initialValue: bio,
     maxLength,
   });
+
+  async function handleEditProfile(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+       const res = await fetch("/api/user?userId="+ id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, username, bio, website, contacts, image: avatar }),
+    });
+
+    const data: { success: boolean } = await res.json();
+    if (data.success) {
+      console.log("userProfile edited successfully");
+      setMainName(name);
+      setMainUsername(username);
+      setMainBio(bio);
+      setMainWebsite(website);
+      setMainContacts(contacts);
+      setMainAvatar(avatar);
+
+    }
+    
+  }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-    <div>
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              className="text-muted-foreground hover:text-primary cursor-pointer"
-              size="icon-sm"
-              variant="ghost"
-            >
-              <PencilIcon className="w-4 h-4" />
-            </Button>
-          </TooltipTrigger>
+        <div>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="text-muted-foreground hover:text-primary cursor-pointer"
+                  size="icon-sm"
+                  variant="ghost"
+                >
+                  <PencilIcon className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
 
-          <TooltipContent className="dark px-2 py-1 text-xs">
-            Edit Profile
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
+              <TooltipContent className="dark px-2 py-1 text-xs">
+                Edit Profile
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-lg [&>button:last-child]:top-3.5">
         <DialogHeader className="contents space-y-0 text-left">
@@ -93,102 +146,127 @@ export default function UserEditProfile() {
           Make changes to your profile here. You can change your photo and set a
           username.
         </DialogDescription>
-        <div className="overflow-y-auto">
-          <ProfileBg />
-          <Avatar />
-          <div className="px-6 pt-4 pb-6">
-            <form className="space-y-4 ">
-              <div className="flex flex-col items-center gap-4 sm:flex-row">
-                {/* name */}
-                <div className="flex-1 space-y-2 ">
-                  <Label htmlFor={`${id}-first-name`}>Name</Label>
-                  <Input
-                    defaultValue="Margaret"
-                    id={`${id}-first-name`}
-                    placeholder="Matt"
-                    required
-                    type="text"
-                  />
-                </div>
 
-                {/* username */}
-                <div className="flex-1 space-y-2">
-                  <Label htmlFor={`${id}-username`}>Username</Label>
-                  <div className="relative">
+        <form onSubmit={handleEditProfile}>
+          <div className="overflow-y-auto">
+            <ProfileBg />
+            <Avatar />
+            <div className="px-6 pt-4 pb-6">
+              <div className="space-y-4 ">
+                <div className="flex flex-col items-center gap-4 sm:flex-row">
+                  {/* name */}
+                  <div className="flex-1 space-y-2 ">
+                    <Label htmlFor={`${id}-first-name`}>name</Label>
                     <Input
-                      className="peer pe-9"
-                      defaultValue="margaret-villard-69"
-                      id={`${id}-username`}
-                      placeholder="Username"
+                      id={`${id}-first-name`}
+                      placeholder="name"
                       required
                       type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
-                    <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
-                      <CheckIcon
-                        aria-hidden="true"
-                        className="text-emerald-500"
-                        size={16}
+                  </div>
+
+                  {/* username */}
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor={`${id}-username`}>username</Label>
+                    <div className="relative">
+                      <Input
+                        className="peer pe-9"
+                        id={`${id}-username`}
+                        placeholder="username"
+                        required
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                       />
+                      <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                        <CheckIcon
+                          aria-hidden="true"
+                          className="text-emerald-500"
+                          size={16}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* biograpgy */}
-              <div className="*:not-first:mt-2">
-                <Label htmlFor={`${id}-bio`}>Bio</Label>
-                <Textarea
-                  aria-describedby={`${id}-description`}
-                  defaultValue={value}
-                  id={`${id}-bio`}
-                  maxLength={maxLength}
-                  onChange={handleChange}
-                  placeholder="Freelance Product Designer"
-                />
-                <p
-                  aria-live="polite"
-                  className="mt-2 text-right text-muted-foreground text-xs"
-                  id={`${id}-description`}
-                  role="status"
-                >
-                  <span className="tabular-nums">{limit - characterCount}</span>{" "}
-                  characters left
-                </p>
-              </div>
-
-              <Separator />
-
-              {/* website */}
-              <div className="*:not-first:mt-2">
-                <Label htmlFor={`${id}-website`}>Website</Label>
-                <div className="flex rounded-md shadow-xs">
-                  <span className="-z-10 inline-flex items-center rounded-s-md border border-input bg-background px-3 text-muted-foreground text-sm">
-                    https://
-                  </span>
-                  <Input
-                    className="-ms-px rounded-s-none shadow-none"
-                    defaultValue="www.margaret.com"
-                    id={`${id}-website`}
-                    placeholder="yourwebsite.com"
-                    type="text"
+                {/* biograpgy */}
+                <div className="*:not-first:mt-2">
+                  <Label htmlFor={`${id}-bio`}>bio</Label>
+                  <Textarea
+                    aria-describedby={`${id}-description`}
+                    id={`${id}-bio`}
+                    maxLength={maxLength}
+                    placeholder="Freelance Product Designer"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
                   />
+                  <p
+                    aria-live="polite"
+                    className="mt-2 text-right text-muted-foreground text-xs"
+                    id={`${id}-description`}
+                    role="status"
+                  >
+                    <span className="tabular-nums">
+                      {limit - characterCount}
+                    </span>{" "}
+                    characters left
+                  </p>
+                </div>
+
+                <Separator />
+
+                {/* website */}
+                <div className="*:not-first:mt-2">
+                  <Label htmlFor={`${id}-website`}>Website</Label>
+                  <div className="flex rounded-md shadow-xs">
+                    <span className="-z-10 inline-flex items-center rounded-s-md border border-input bg-background px-3 text-muted-foreground text-sm">
+                      https://
+                    </span>
+                    <Input
+                      className="-ms-px rounded-s-none shadow-none"
+                      id={`${id}-website`}
+                      placeholder="srijan-patel.vercel.app/"
+                      type="text"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* contacts */}
+                <div className="*:not-first:mt-2">
+                  <Label htmlFor={id}>Contacts</Label>
+                  <div className="flex rounded-md shadow-xs">
+                   
+                     <span className="-z-10 inline-flex items-center rounded-s-md border border-input bg-background px-3 text-muted-foreground text-sm"> 
+                       <Linkedin className="w-4 h-4"/>
+
+                    </span>
+                    <Input
+                      className="-ms-px rounded-s-none shadow-none"
+                      id={id}
+                      placeholder="https://www.linkedin.com/in/srijan-patel-46a548323/"
+                      type="text"
+                      value={contacts}
+                      onChange={(e) => setContacts(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-              {/* contacts */}
-              <UserContactInput />
-            </form>
+            </div>
           </div>
-        </div>
-        <DialogFooter className="border-t px-6 py-4">
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancel
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button type="button">Save changes</Button>
-          </DialogClose>
-        </DialogFooter>
+          <DialogFooter className="border-t px-6 py-4">
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button type="submit">Save changes</Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

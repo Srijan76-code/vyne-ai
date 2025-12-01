@@ -20,9 +20,12 @@ model User {
   password  String
   name      String?
   image     String?
+  username  String?
+  bio       String?
+  website   String?
+  contacts  String? 
+  
   prompts   Int      @default(0)
-  
-  
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   
@@ -30,6 +33,7 @@ model User {
   // billingCustomerId String? @unique
 
   // Relations
+  clones   ProjectClone[]
   projects Project[]
 }
 
@@ -51,7 +55,26 @@ model Project {
 
   userId      Int     
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likedBy   ProjectLike[]
+  clonedBy  ProjectClone[]
   
   @@index([isPublic, Likes])
 }
 
+model ProjectLike {
+  id        Int   @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  @@unique([userId, projectId])
+}
+
+
+model ProjectClone {
+  id        Int   @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project  @relation(fields: [projectId], references: [id])
+  @@unique([userId, projectId])
+}
