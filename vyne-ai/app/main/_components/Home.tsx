@@ -17,7 +17,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CodeXml, Eye } from "lucide-react";
+import { CloudCheck, CodeXml, Eye, Save } from "lucide-react";
 import { useStatus } from "@/store/useStatus";
 
 import ShinyText from "@/components/ShinyText";
@@ -31,6 +31,7 @@ import LogoutButton from "@/app/auth/_components/LogoutButton";
 import { CirclePlus, LogOut, User, Users, Users2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 import {
   DropdownMenu,
@@ -47,6 +48,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HoverButton } from "@/components/Buttons/HoverButton";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 type AiFile = {
   path: string;
@@ -59,6 +61,7 @@ const Home = () => {
   const [tab, setTab] = useState(0);
   const { status, setStatus } = useStatus();
   const { messages, addMessage } = useChatStore();
+  const {user}=useAuthStore()
 
   const { object, submit, isLoading, stop, error } = useObject({
     api: "/api/vyne",
@@ -74,6 +77,45 @@ const Home = () => {
       console.error("Streaming error:", err);
     },
   });
+
+  async function saveProject() {
+    if (!user?.id || messages.length === 0 ) {
+      console.log("No messages found");
+      toast.error("No project found!");
+      return;
+    }
+    
+    if (messages[messages.length - 1]?.role === "assistant") {
+      const projectObject = messages[messages.length - 1]?.content as
+        | { files?: AiFile[]; summary?: string }
+        | undefined;
+
+      const res = await fetch("/api/user/projects?userId=" +user.id , {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({projectObject}),
+      });
+
+      const data: { success: boolean } = await res.json();
+      if (data.success) {
+        toast.success("Success!", {
+          description: "Project saved successfully",
+        });
+
+        console.log("Project saved successfully");
+      }else{
+        toast.error("Error!", {
+              description: "Failed to save project. Please try again.",
+            })
+      }
+    } else {
+      console.log("No assistant message found");
+      toast.error("No project found!");
+      return;
+    }
+  }
 
   //  Watch the state changes
   useEffect(() => {
@@ -169,59 +211,65 @@ const Home = () => {
                 </Tooltip>
               </ButtonGroup>
 
-        <div className="flex  gap-5">
-          <Deploy/>
-          <Link href="/main">
-            <HoverButton >
-              <div className="flex gap-2 items-center">
-                <CirclePlus className="w-4 h-4" />
-                <p>New project</p>
-              </div>
-            </HoverButton>
-          </Link>
+              <div className="flex  gap-5">
+                <Deploy />
+                <HoverButton onClick={saveProject}>
+                  <div className="flex gap-2 items-center">
+                    <CloudCheck className="w-4 h-4" />
+                    <p>Save project</p>
+                  </div>
+                </HoverButton>
+                <Link href="/main">
+                  <HoverButton>
+                    <div className="flex gap-2 items-center">
+                      <CirclePlus className="w-4 h-4" />
+                      <p>New project</p>
+                    </div>
+                  </HoverButton>
+                </Link>
 
-          <Link href="/community">
-            <HoverButton>
-              <div className="flex gap-2 items-center">
-                <Users className="w-4 h-4" />
-                <p>Community</p>
-              </div>
-            </HoverButton>
-          </Link>
+                <Link href="/community">
+                  <HoverButton>
+                    <div className="flex gap-2 items-center">
+                      <Users className="w-4 h-4" />
+                      <p>Community</p>
+                    </div>
+                  </HoverButton>
+                </Link>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-
-              <div
-                className="w-8 h-8 cursor-pointer inset-0  rounded-full "
-                style={{
-                  backgroundImage: `
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div
+                      className="w-8 h-8 cursor-pointer inset-0  rounded-full "
+                      style={{
+                        backgroundImage: `
        radial-gradient(circle at center, #8249fc, transparent)        
      `,
-                }}
-              ></div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full bg-black" align="start">
-              <DropdownMenuItem>
-                <Link href="/profile">
-                  <div className="flex gap-2 items-center">
-                    <User className="w-4 h-4" />
-                    <p>Profile</p>
-                  </div>
-                </Link>
-              </DropdownMenuItem>
+                      }}
+                    ></div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-full bg-black"
+                    align="start"
+                  >
+                    <DropdownMenuItem>
+                      <Link href="/profile">
+                        <div className="flex gap-2 items-center">
+                          <User className="w-4 h-4" />
+                          <p>Profile</p>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
 
-              <DropdownMenuItem>
-                <div className="flex text-red-500 gap-2 items-center">
-                  <LogOut className="w-4 text-red-500 h-4" />
-                  <p>Logout</p>
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-
+                    <DropdownMenuItem>
+                      <div className="flex text-red-500 gap-2 items-center">
+                        <LogOut className="w-4 text-red-500 h-4" />
+                        <p>Logout</p>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
 
             <div className="w-full h-full">

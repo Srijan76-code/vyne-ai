@@ -17,9 +17,9 @@ interface CommunityProject {
   createdAt: string;
   Likes: number;
   Clones: number;
-  user?: {
-    image: string | null;
-  };
+  deploymentUrl: string;
+  deploymentStatus: string;
+
 }
 const FilterProjects = () => {
   const { user } = useAuthStore();
@@ -127,7 +127,9 @@ const FilterProjects = () => {
               createdAt={localDate(project.createdAt)}
               Likes={project.Likes}
               Clones={project.Clones}
-              user={project.user}
+              deploymentUrl={project.deploymentUrl}
+              deploymentStatus={project.deploymentStatus}
+              
             />
           ))
         ))}

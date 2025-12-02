@@ -12,7 +12,8 @@ interface ProjectCardProps {
   createdAt: string;
   Likes: number;
   Clones: number;
-
+  deploymentUrl: string;
+  deploymentStatus: string;
 }
 
 const ProjectCard = ({
@@ -22,8 +23,11 @@ const ProjectCard = ({
   createdAt,
   Likes,
   Clones,
+  deploymentUrl,
+  deploymentStatus,
   
 }: ProjectCardProps) => {
+  
   const [name,setName] = useState(title);
 
   const [likes,setLikes] = useState(Likes);
@@ -81,7 +85,7 @@ const ProjectCard = ({
         </div>
 
         <div className="ml-auto ">
-          <Hamburger remix={remix} setName={setName} id={id} name={name} />
+          <Hamburger deploymentUrl={deploymentUrl} deploymentStatus={deploymentStatus} remix={remix} setName={setName} id={id} name={name} />
         </div>
       </div>
     </div>

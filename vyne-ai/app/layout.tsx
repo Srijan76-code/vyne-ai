@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/theme/provider";
 import AuthProvider from "./_components/AuthProvider";
 import { Urbanist } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
+
 const urbanist = Urbanist({ subsets: ["latin"] });
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${urbanist.className} bg-black ${geistMono.variable} antialiased`}
       >
+        <Toaster />
         <AuthProvider />
         <ThemeProvider
           attribute="class"

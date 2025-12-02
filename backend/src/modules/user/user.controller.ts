@@ -82,6 +82,8 @@ export const getUserProjects = async (req: Request, res: Response) => {
         createdAt: true,
         Likes: true,
         Clones: true,
+        deploymentUrl: true,
+        deploymentStatus: true,
         user: true,
       },
     });
@@ -114,19 +116,21 @@ export const getUserProjects = async (req: Request, res: Response) => {
 };
 
 export const createProject = async (req: Request, res: Response) => {
-  const { userId, title, content } = req.body;
+  const { projectObject } = req.body;
+  const {userId}=req.query;
+  console.log("isnide backend", projectObject);
 
   try {
     const createdProject = await prisma.project.create({
       data: {
-        title: title || "Untitled Project",
         userId: Number(userId),
-        content: content,
+        content: projectObject,
       },
     });
-    return res.status(201).json(createdProject);
+    return res.status(201).json({success: true});
   } catch (error) {
-    return res.status(400).send("Project creation failed");
+    console.log(error);
+    return res.status(400).json({success: false});
   }
 };
 
