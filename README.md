@@ -2,7 +2,7 @@
 # **VYNE – AI Website Builder**
 
 An **AI-powered website builder** that converts prompts into full stack website and deploy it too.
-Built with **Next.js**, **Prisma**, **Gemini 2.5 Pro**, **Vercel AI SDK** and deployed on **Vercel**.
+Built with **Next.js**, **Node Js** ,**Express**, **Prisma**, **Gemini 2.5 Pro**, **Vercel AI SDK** and deployed on **Vercel** and **Render**.
 
 ---
 
