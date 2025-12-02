@@ -36,13 +36,13 @@ const Hero = () => {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <Image
-              src="/vercel.svg"
-              alt="PixLyne Logo"
+              src="/logo.png"
+              alt="Vyne-Ai Logo"
               width={42}
               height={42}
-              className="drop-shadow-[0_0_10px_rgba(0,255,195,0.4)] w-4 h-4"
+              className="drop-shadow-[0_0_10px_rgba(0,255,195,0.4)] w-8 h-8"
             />
-            <p className="text-neutral-300 font-raleway font-semibold text-xl ">
+            <p className="font-semibold ">
               Vyne-Ai
             </p>
           </div>
