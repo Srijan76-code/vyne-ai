@@ -37,6 +37,7 @@ res.cookie("token", token, {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",  // HTTPS in prod only
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  domain: "vyne-ai.onrender.com", 
   path: "/",
   maxAge: 60 * 60 * 24 * 7 * 1000,
 });
@@ -74,6 +75,7 @@ res.cookie("token", token, {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",  // HTTPS in prod only
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  domain: "vyne-ai.onrender.com", 
   path: "/",
   maxAge: 60 * 60 * 24 * 7 * 1000,
 });
@@ -90,6 +92,7 @@ export const logout = async (req: Request, res: Response) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    domain: "vyne-ai.onrender.com", 
     path: "/",
     maxAge: 0,
   });
