@@ -28,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 // Pretend we have initial image files
 const initialBgImage = [
@@ -102,6 +103,7 @@ export default function UserEditProfile({id, mainName,mainUsername,mainBio,mainW
 
     const data: { success: boolean } = await res.json();
     if (data.success) {
+      toast.success("Profile edited successfully");
       console.log("userProfile edited successfully");
       setMainName(name);
       setMainUsername(username);
@@ -110,6 +112,8 @@ export default function UserEditProfile({id, mainName,mainUsername,mainBio,mainW
       setMainContacts(contacts);
       setMainAvatar(avatar);
 
+    }else{
+      toast.error("userProfile editing failed");
     }
     
   }

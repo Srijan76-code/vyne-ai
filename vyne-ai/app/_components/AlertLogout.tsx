@@ -21,17 +21,23 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function AlertLogout() {
   const router = useRouter();
 
   async function handleLogout() {
-   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`, {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
     console.log("logout");
+    toast.success("Logged out successfully");
     router.push("/auth/login");
+    } catch (error) {
+      toast.error("Logout failed");
+    }
   }
   return (
     <AlertDialog>

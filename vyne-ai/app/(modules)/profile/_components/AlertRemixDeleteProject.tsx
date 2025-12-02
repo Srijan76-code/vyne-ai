@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function AlertRemixDeleteProject({id,userId}: {id: string, userId: number}) {
 
@@ -31,7 +32,10 @@ export default function AlertRemixDeleteProject({id,userId}: {id: string, userId
 
     const data: { success: boolean } = await res.json();
     if (data.success) {
+      toast.success("Project deleted successfully");
       console.log("remix project deleted successfully");
+    }else{
+      toast.error("Project deletion failed");
     }
 
   }

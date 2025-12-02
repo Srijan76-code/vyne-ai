@@ -29,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 export default function AlertEditProject({
   id,
@@ -55,8 +56,11 @@ export default function AlertEditProject({
 
     const data: { success: boolean } = await res.json();
     if (data.success) {
+      toast.success("Project name edited successfully");
       console.log("project edited successfully");
       setName(projectName)
+    }else{
+      toast.error("Project name editing failed");
     }
 
   }

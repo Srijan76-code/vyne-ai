@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function AlertDeleteProject({id}: {id: string}) {
   async function handleDeleteProject() {
@@ -30,7 +31,10 @@ export default function AlertDeleteProject({id}: {id: string}) {
 
     const data: { success: boolean } = await res.json();
     if (data.success) {
+      toast.success("Project deleted successfully");
       console.log("project deleted successfully");
+    }else{
+      toast.error("Project deletion failed");
     }
 
   }
