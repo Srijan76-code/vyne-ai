@@ -12,7 +12,18 @@ import { staggerItemVariants } from "./animations/variants";
 import Beams from "@/components/Beams";
 import GetStartedButton from "@/components/Buttons/GetStartedButton";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuthStore";
 const Hero = () => {
+   const { isLoggedIn, loading } = useAuthStore();
+    function handleClick() {
+    if (loading) return; 
+
+    if (isLoggedIn) {
+      router.push("/profile");
+    } else {
+      router.push("/auth/login");
+    }
+  }
   const router = useRouter();
   return (
     <StaggerFadeRise className=" ">
@@ -39,7 +50,7 @@ const Hero = () => {
           {/* Modern Hover Button */}
           {/* <Cta> */}
           <HoverButton
-          onClick={()=>router.push("/profile")}
+          onClick={handleClick}
             glowColor="#2667ff"
             backgroundColor="#0d0d0d"
             textColor="#ffffff"
@@ -89,7 +100,7 @@ const Hero = () => {
 
 
           <motion.div className="mt-16" variants={staggerItemVariants}>
-            <GetStartedButton handleclick={()=>router.push("/profile")} >Get Started</GetStartedButton>
+            <GetStartedButton handleclick={()=>handleClick()} >Get Started</GetStartedButton>
           </motion.div>
 
           <div className="mt-20 flex flex-col items-center font-raleway">

@@ -14,8 +14,19 @@ import { staggerItemVariants } from "./animations/variants";
 import { HoverButton } from "@/components/Buttons/HoverButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuthStore";
 const Footer = () => {
   const router = useRouter();
+     const { isLoggedIn, loading } = useAuthStore();
+      function handleClick() {
+      if (loading) return; 
+  
+      if (isLoggedIn) {
+        router.push("/profile");
+      } else {
+        router.push("/auth/login");
+      }
+    }
   return (
     <StaggerFadeRise>
       <div className="relative mt-[350vh] w-full h-[700px] overflow-hidden">
@@ -47,7 +58,7 @@ const Footer = () => {
           <motion.div variants={staggerItemVariants}>
             {/* <Cta> */}
               <HoverButton
-              onClick={()=>router.push("/profile")}
+              onClick={handleClick}
                 data-cal-namespace="30min"
                 data-cal-link="srijanpatel/30min"
                 data-cal-config='{"layout":"month_view"}'
