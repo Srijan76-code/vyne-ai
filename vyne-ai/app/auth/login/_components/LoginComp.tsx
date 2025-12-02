@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const LoginComp = () => {
-  const { setUser,loading:userLoading } = useAuthStore();
+  const { setUser } = useAuthStore();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

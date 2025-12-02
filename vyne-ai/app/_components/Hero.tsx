@@ -11,7 +11,9 @@ import StaggerFadeRise from "./animations/StaggerFadeRise";
 import { staggerItemVariants } from "./animations/variants";
 import Beams from "@/components/Beams";
 import GetStartedButton from "@/components/Buttons/GetStartedButton";
+import { useRouter } from "next/navigation";
 const Hero = () => {
+  const router = useRouter();
   return (
     <StaggerFadeRise className=" ">
       <div style={{ width: "100%", height: "100vh", position: "relative" }}>
@@ -37,13 +39,14 @@ const Hero = () => {
           {/* Modern Hover Button */}
           {/* <Cta> */}
           <HoverButton
+          onClick={()=>router.push("/profile")}
             glowColor="#2667ff"
             backgroundColor="#0d0d0d"
             textColor="#ffffff"
             hoverTextColor="#ffffff"
             className="  text-sm font-light "
           >
-            SignIn
+            Start Building
           </HoverButton>
           {/* </Cta> */}
         </motion.nav>
@@ -86,7 +89,7 @@ const Hero = () => {
 
 
           <motion.div className="mt-16" variants={staggerItemVariants}>
-            <GetStartedButton>Get Started</GetStartedButton>
+            <GetStartedButton handleclick={()=>router.push("/profile")} >Get Started</GetStartedButton>
           </motion.div>
 
           <div className="mt-20 flex flex-col items-center font-raleway">

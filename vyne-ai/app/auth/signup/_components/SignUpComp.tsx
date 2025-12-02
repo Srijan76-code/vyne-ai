@@ -30,7 +30,7 @@ const SignUpComp = () => {
       credentials: "include",
     });
     setLoading(false);
-    if (res.ok) router.push("/main");
+    if (res.ok) router.push("/profile");
     else {
       const j = await res.json();
       setError(j?.error || "Something went wrong");
