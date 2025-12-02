@@ -7,6 +7,7 @@ import { AnimatedLoader } from "../Animations/AnimatedLoader";
 import ShinyText from "@/components/ShinyText";
 import { useStatus } from "@/store/useStatus";
 import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
 
 type AiFile = {
   path: string;
@@ -285,7 +286,7 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
           <p className="text-gray-400 text-sm mt-2">
             {object?.files?.length || 0} files received so far
           </p>
-      <Spinner variant="ring" size={32}/>
+      
         </div>
       </div>
     );
@@ -323,21 +324,22 @@ export default function WebContainers({ object, isLoading }: ChatBoxProps) {
     return (
       <div className="h-dvh p-2 flex items-center justify-center overflow-auto">
         <div className="text-center max-w-2xl w-full">
-          <div className="text-6xl mb-4">❌</div>
+          <div className="text-6xl mb-4"></div>
           <p className="text-red-500 font-semibold text-lg mb-2">Setup Error</p>
           <div className="text-left bg-gray-900 p-4 rounded text-xs text-gray-300 overflow-auto max-h-96 mb-4">
             <pre className="whitespace-pre-wrap">{error}</pre>
           </div>
-          <button
+          <Button
             onClick={() => {
               hasRunSetupRef.current = false;
               setError(null);
               window.location.reload();
             }}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            variant="outline"
+            className=""
           >
             Retry
-          </button>
+          </Button>
         </div>
       </div>
     );

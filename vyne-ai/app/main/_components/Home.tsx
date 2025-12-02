@@ -62,50 +62,52 @@ const Home = () => {
   const [tab, setTab] = useState(0);
   const { status, setStatus } = useStatus();
   const { messages, addMessage } = useChatStore();
-  const {user}=useAuthStore()
-const { object, submit, isLoading, stop, error } = useObject({
+  const { user } = useAuthStore();
+  const { object, submit, isLoading, stop, error } = useObject({
+    api: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/vyne`,
+    schema: ProjectSchema,
 
-  api: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/vyne`,
-  schema: ProjectSchema,
+    fetch: (input, init) =>
+      fetch(input, {
+        ...init,
+        credentials: "include",
+      }),
 
-  fetch: (input, init) =>
-    fetch(input, {
-      ...init,
-      credentials: "include",
-    }),
+    onFinish({ object }) {
+      addMessage({
+        role: "assistant",
+        content: JSON.parse(JSON.stringify(object)),
+      });
+    },
 
-  onFinish({ object }) {
-    addMessage({
-      role: "assistant",
-      content: JSON.parse(JSON.stringify(object)),
-    });
-  },
-
-  onError(err) {
-    console.error("Streaming error:", err);
-  },
-});
-
+    onError(err) {
+      console.error("Streaming error:", err);
+    },
+  });
 
   async function saveProject() {
-    if (!user?.id || messages.length === 0 ) {
+    if (!user?.id || messages.length === 0) {
       console.log("No messages found");
       toast.error("No project found!");
       return;
     }
-    
+
     if (messages[messages.length - 1]?.role === "assistant") {
       const projectObject = messages[messages.length - 1]?.content as
         | { files?: AiFile[]; summary?: string }
         | undefined;
 
-      const res = await fetch("/api/user/projects?userId=" +user.id , {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({projectObject}),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/projects?userId=${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ projectObject }),
+        }
+      );
 
       const data: { success: boolean } = await res.json();
       if (data.success) {
@@ -114,10 +116,10 @@ const { object, submit, isLoading, stop, error } = useObject({
         });
 
         console.log("Project saved successfully");
-      }else{
+      } else {
         toast.error("Error!", {
-              description: "Failed to save project. Please try again.",
-            })
+          description: "Failed to save project. Please try again.",
+        });
       }
     } else {
       console.log("No assistant message found");
