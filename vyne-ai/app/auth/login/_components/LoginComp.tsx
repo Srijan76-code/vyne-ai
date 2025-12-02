@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const LoginComp = () => {
-  const { setUser } = useAuthStore();
+  const { setUser,loading:userLoading } = useAuthStore();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,31 +21,30 @@ const LoginComp = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`, {
+async function submit(e: React.FormEvent) {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
+    {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: emailAddress, password }),
       credentials: "include",
-    });
-    setLoading(false);
-
-    console.log("response ", res);
-
-    if (res.ok) {
-      const j = await res.json();
-    console.log("payload ", j);
-
-      setUser(j.user);
-      router.push("/profile");
-    } else {
-      const j = await res.json();
-      setError(j.error || "Something went wrong");
     }
+  );
+
+  setLoading(false);
+
+  if (res.ok) {
+    router.push("/profile");
+  } else {
+    const j = await res.json();
+    setError(j.error || "Something went wrong");
   }
+}
 
   return (
     <div className=" flex  justify-center mx-auto  ">
