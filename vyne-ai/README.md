@@ -41,7 +41,7 @@ VYNE integrates multiple layers for a seamless AI-driven experience:
 | Layer              | Technology                     | Description                                                       |
 | ------------------ | ------------------------------ | ----------------------------------------------------------------- |
 | **Frontend**       | Next.js                        | Modern fullstack framework for UI + API routes                    |
-| **Backend**        | Next.js API Routes             | Handles authentication, AI requests, and CRUD operations          |
+| **Backend**        | Node Js+ Express               | Handles authentication, AI requests, and CRUD operations         |
 | **AI Engine**      | Gemini 2.5 Pro + Vercel AI SDK | Generates website structure, components, and content from prompts |
 | **Database**       | Neon (PostgreSQL) + Prisma ORM | Efficient schema modeling and database interaction                |
 | **Authentication** | JWT                            | Secure token-based session management                             |
@@ -65,10 +65,12 @@ VYNE integrates multiple layers for a seamless AI-driven experience:
 
 | Category               | Tools                                    |
 | ---------------------- | ---------------------------------------- |
-| **Frontend + Backend** | Next.js                                  |
+| **Frontend**           | Next.js                                  |
+| **Backend**            | Node Js+ Express                         |
 | **AI Layer**           | Gemini 2.5 Pro, LangChain, Vercel AI SDK |
 | **Database**           | Neon (PostgreSQL) via Prisma ORM         |
 | **Authentication**     | JWT                                      |
-| **Hosting**            | Vercel                                   |
+| **Frontend Hosting**   | Vercel                                   |
+| **Backend Hosting**    | Render                                   |
 
 ---
