@@ -59,7 +59,10 @@ const FilterProjects = () => {
 
     const fetchUserProjects = async () => {
       const response = await fetch(
-        `/api/user/projects?userId=${user.id}&filter=${filter}&page=${page}&limit=${limit}&search=${debouncedSearch}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/projects?userId=${user.id}&filter=${filter}&page=${page}&limit=${limit}&search=${debouncedSearch}`,
+        {
+          credentials: "include",
+        }
       );
 
       const data = await response.json();

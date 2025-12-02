@@ -26,8 +26,9 @@ export default function AlertLogout() {
   const router = useRouter();
 
   async function handleLogout() {
-   await fetch(`/api/auth/logout`, {
+   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`, {
       method: "POST",
+      credentials: "include",
     });
     console.log("logout");
     router.push("/auth/login");

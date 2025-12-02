@@ -3,6 +3,18 @@ import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
+type Direction = "TOP" | "LEFT" | "BOTTOM" | "RIGHT";
+
+interface HoverBorderGradientProps {
+  as?: any;
+  containerClassName?: string;
+  className?: string;
+  duration?: number;
+  clockwise?: boolean;
+  children?: React.ReactNode;
+  [key: string]: any;
+}
+
 export function HoverBorderGradient({
   children,
   containerClassName,
@@ -11,12 +23,12 @@ export function HoverBorderGradient({
   duration = 1,
   clockwise = true,
   ...props
-}) {
-  const [hovered, setHovered] = useState(false);
-  const [direction, setDirection] = useState("TOP");
+}: HoverBorderGradientProps) {
+  const [hovered, setHovered] = useState<boolean>(false);
+  const [direction, setDirection] = useState<Direction>("TOP");
 
-  const rotateDirection = (currentDirection) => {
-    const directions = ["TOP", "LEFT", "BOTTOM", "RIGHT"];
+  const rotateDirection = (currentDirection: Direction): Direction => {
+    const directions: Direction[] = ["TOP", "LEFT", "BOTTOM", "RIGHT"];
     const currentIndex = directions.indexOf(currentDirection);
     const nextIndex = clockwise
       ? (currentIndex - 1 + directions.length) % directions.length
@@ -24,7 +36,7 @@ export function HoverBorderGradient({
     return directions[nextIndex];
   };
 
-  const movingMap = {
+  const movingMap: Record<Direction, string> = {
     TOP: "radial-gradient(20.7% 50% at 50% 0%, hsl(210, 100%, 60%) 0%, rgba(255, 255, 255, 0) 100%)",
     LEFT: "radial-gradient(16.6% 43.1% at 0% 50%, hsl(210, 100%, 60%) 0%, rgba(255, 255, 255, 0) 100%)",
     BOTTOM:
@@ -51,7 +63,7 @@ export function HoverBorderGradient({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={cn(
-        "relative flex rounded-full border border-white/10 content-center bg-black/20 hover:bg-black/10 transition duration-500 items-center flex-col flex-nowrap gap-10 h-min justify-center overflow-visible p-px decoration-clone w-fit",
+        "relative flex rounded-full border border-white/10 content-center bg-black/20 hover:bg-black/10 transition duration-500 items-center flex-col flex-nowrap gap-10 h-min justify-center overflow-visible p-px box-decoration-clone w-fit",
         containerClassName
       )}
       {...props}
@@ -66,7 +78,9 @@ export function HoverBorderGradient({
       </div>
 
       <motion.div
-        className={cn("flex-none inset-0 overflow-hidden absolute z-0 rounded-[inherit]")}
+        className={cn(
+          "flex-none inset-0 overflow-hidden absolute z-0 rounded-[inherit]"
+        )}
         style={{
           filter: "blur(2px)",
           position: "absolute",

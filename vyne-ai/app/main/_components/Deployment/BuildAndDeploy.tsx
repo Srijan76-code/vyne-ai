@@ -132,9 +132,10 @@ export async function buildAndDeploy(webContainer: WebContainer) {
   );
 
   // 5. Deploy to Cloudflare Pages
-  const res = await fetch("/api/deploy", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deploy`, {
     method: "POST",
     body: form,
+    credentials: "include",
   });
 
   const text = await res.text();

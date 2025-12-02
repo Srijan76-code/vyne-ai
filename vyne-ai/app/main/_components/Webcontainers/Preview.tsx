@@ -1,3 +1,4 @@
+import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useRef, useState } from "react";
 
 
@@ -18,9 +19,9 @@ export default function Preview({ serverUrl }: PreviewProps) {
 
   if (!serverUrl) {
     return (
-      <div className="h-full w-full flex items-center justify-center bg-gray-900 text-white">
+      <div className="h-full w-full flex items-center justify-center bg-transparent">
         <div className="text-center">
-          <div className="animate-spin text-6xl mb-4">🔄</div>
+          <div className=" mb-4"><Spinner variant="ring" size={32}/> </div>
           <p className="text-lg">Waiting for dev server URL...</p>
         </div>
       </div>
@@ -28,15 +29,15 @@ export default function Preview({ serverUrl }: PreviewProps) {
   }
 
   return (
-    <div className="h-full w-full flex flex-col bg-black">
-      <div className="bg-black px-4 py-2 flex items-center gap-2 border-b border-neutral-800">
+    <div className="h-full w-full flex flex-col bg-transparent">
+      <div className="bg-transparent px-4 py-2 flex items-center gap-2 border-b border-neutral-800">
         <div className="flex-1 bg-neutral-900  border border-neutral-800 rounded px-3 py-1 text-sm text-gray-300 font-mono truncate">
           {serverUrl}
         </div>
       </div>
       <iframe
         ref={iframeRef}
-        className="flex-1 w-full border-0 bg-white"
+        className="flex-1 w-full border-0 bg-transparent"
         title="Preview"
       />
     </div>

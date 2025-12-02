@@ -15,9 +15,7 @@ interface CommunityProject {
   createdAt: string;
   Likes: number;
   Clones: number;
-  user?: {
-    image: string | null;
-  };
+
 }
 const FilterCommunity = () => {
   const [loading, setLoading] = useState(false);
@@ -54,7 +52,9 @@ const FilterCommunity = () => {
 
     const fetchProjects = async () => {
       const response = await fetch(
-        `/api/projects?filter=${filter}&page=${page}&limit=${limit}&search=${debouncedSearch}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/projects?filter=${filter}&page=${page}&limit=${limit}&search=${debouncedSearch}`,{
+      credentials: "include",
+    }
       );
 
       const data = await response.json();
@@ -111,7 +111,7 @@ const FilterCommunity = () => {
               createdAt={localDate(project.createdAt)}
               Likes={project.Likes}
               Clones={project.Clones}
-              user={project.user}
+             
             />
           ))
         ))}

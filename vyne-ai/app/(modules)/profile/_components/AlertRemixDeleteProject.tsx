@@ -20,12 +20,13 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
-export default function AlertRemixDeleteProject({id,userId}: {id: string, userId: Number}) {
+export default function AlertRemixDeleteProject({id,userId}: {id: string, userId: number}) {
 
   async function handleDeleteProject() {
 
-    const res = await fetch("/api/projects/clone?userId="+userId+"&projectId="+id, {
+    const res = await fetch( `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/projects/clone?userId=${userId}&projectId=${id}`, {
       method: "DELETE",
+      credentials: "include",
     });
 
     const data: { success: boolean } = await res.json();

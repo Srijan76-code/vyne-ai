@@ -14,7 +14,6 @@ const summarySchema = `A detailed, structured summary of the generated project i
  [Features included in the app]
 `;
 
-// A single file representation
 const FileSchema = z.object({
   path: z
     .string()
@@ -24,7 +23,6 @@ const FileSchema = z.object({
   contents: z.string().describe("The complete text content of the file."),
 });
 
-// The root project schema
 export const ProjectSchema = z.object({
   files: z
     .array(FileSchema)

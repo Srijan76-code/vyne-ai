@@ -52,7 +52,10 @@ const [loading,setLoading] = useState(false)
   
       const fetchUserData = async () => {
         const response = await fetch(
-          `/api/user?userId=${user.id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user?userId=${user.id}`,
+          {
+            credentials: "include",
+          }
         );
   
         const data = await response.json();

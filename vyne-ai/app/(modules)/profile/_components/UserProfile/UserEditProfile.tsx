@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import UserContactInput from "./UserContactInput";
+
 import { Separator } from "@/components/ui/separator";
 
 import {
@@ -91,12 +91,13 @@ export default function UserEditProfile({id, mainName,mainUsername,mainBio,mainW
   async function handleEditProfile(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-       const res = await fetch("/api/user?userId="+ id, {
+       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user?userId=`+ id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ name, username, bio, website, contacts, image: avatar }),
+      credentials: "include",
     });
 
     const data: { success: boolean } = await res.json();

@@ -10,7 +10,7 @@ export default function AuthProvider() {
   useEffect(() => {
     async function loadUser() {
       try {
-        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/me`, { credentials: "include" });
         const data = await res.json();
 
 

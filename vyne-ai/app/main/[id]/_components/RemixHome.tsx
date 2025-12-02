@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { ProjectSchema } from "@/app/_api/vyne/schema";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import {
@@ -52,6 +51,7 @@ import Deploy from "@/app/main/_components/Deployment/Deploy";
 import MainExplorer from "@/app/main/_components/FileExplorer/MainExplorer";
 import CodeEditorNew from "@/app/main/_components/CodeEditor/CodeEditorNew";
 import WebContainers from "@/app/main/_components/Webcontainers/Webcontainers";
+import { ProjectSchema } from "@/app/_components/ProjectSchema";
 
 type AiFile = {
   path: string;
@@ -79,20 +79,28 @@ const RemixHome = ({project}: {project: Project}) => {
   const { messages, addMessage } = useChatStore();
 
 
-  const { object, submit, isLoading, stop, error } = useObject({
-    api: "/api/vyne",
-    schema: ProjectSchema,
-    onFinish({ object }) {
-      // addMessage expects a Message { role, content }
-      addMessage({
-        role: "assistant",
-        content: JSON.parse(JSON.stringify(object)),
-      });
-    },
-    onError(err) {
-      console.error("Streaming error:", err);
-    },
-  });
+const { object, submit, isLoading, stop, error } = useObject({
+  api: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/vyne`,
+  schema: ProjectSchema,
+
+  fetch: (input, init) =>
+    fetch(input, {
+      ...init,
+      credentials: "include",
+    }),
+
+  onFinish({ object }) {
+    addMessage({
+      role: "assistant",
+      content: JSON.parse(JSON.stringify(object)),
+    });
+  },
+
+  onError(err) {
+    console.error("Streaming error:", err);
+  },
+});
+
 
 useEffect(() => {
   if (!initialized.current) {

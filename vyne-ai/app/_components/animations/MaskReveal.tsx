@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
  * A reusable component that reveals its children with a "mask wipe"
  * animation as it scrolls into view.
  */
-const MaskReveal = ({ children }) => {
+const MaskReveal = ({ children }: { children: React.ReactNode }) => {
   return (
     // This is the MASK. It clips its children.
     <div style={{ overflow: 'hidden', width: '100%' }}>

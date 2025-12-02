@@ -33,13 +33,14 @@ export const signup = async (req: Request, res: Response) => {
 
     const token = await signToken({ id: user.id, email: user.email }, "7d");
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7 * 1000,
-    });
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",  // HTTPS in prod only
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7 * 1000,
+});
+
     return res.json({ ok: true, id: user.id, email: user.email });
   } catch (error: any) {
     if (
@@ -69,13 +70,14 @@ export const login = async (req: Request, res: Response) => {
 
   const token = await signToken({ id: user.id, email: user.email }, "7d");
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7 * 1000,
-  });
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",  // HTTPS in prod only
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7 * 1000,
+});
+
 
   return res.json({
     ok: true,
@@ -87,7 +89,7 @@ export const logout = async (req: Request, res: Response) => {
   res.cookie("token", "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
     maxAge: 0,
   });

@@ -44,12 +44,13 @@ export default function AlertEditProject({
   async function editProject(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const res = await fetch("/api/user/projects", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/projects`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id, title: projectName }),
+      credentials: "include",
     });
 
     const data: { success: boolean } = await res.json();

@@ -2,13 +2,12 @@
   "name": "vyne-ai",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "postinstall": "prisma generate",
-    "dev": "next dev",
-    "build": "npx prisma generate && next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "eslint"
+},
   "dependencies": {
     "@ai-sdk/google": "^2.0.25",
     "@ai-sdk/react": "^2.0.82",

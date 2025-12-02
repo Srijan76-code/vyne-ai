@@ -13,10 +13,7 @@ interface ProjectCardProps {
   createdAt: string;
   Likes: number;
   Clones: number;
-  user?: {
-    id: number;
-    image: string | null;
-  };
+
 }
 
 const ProjectCard = ({
@@ -25,7 +22,6 @@ const ProjectCard = ({
   createdAt,
   Likes,
   Clones,
-  user: owner,
 }: ProjectCardProps) => {
   const [likes, setLikes] = useState(Likes);
   const [liked, setLiked] = useState(false);
@@ -37,12 +33,13 @@ const ProjectCard = ({
 
   async function changeLike() {
     setLoading(true);
-    const res = await fetch("/api/projects/like", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/projects/like`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ projectId: id, userId: authUser?.id }),
+      credentials: "include",
     });
 
     const data: { liked: boolean } = await res.json();
@@ -59,12 +56,13 @@ const ProjectCard = ({
 
   async function cloneProject() {
     setCloneLoading(true);
-    const res = await fetch("/api/projects/clone", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/projects/clone`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ projectId: id, userId: authUser?.id }),
+      credentials: "include",
     });
 
     const data: { success: boolean; alreadyCloned: boolean } = await res.json();
