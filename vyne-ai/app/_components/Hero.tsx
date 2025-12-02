@@ -51,7 +51,7 @@ const Hero = () => {
         {/* Hero Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-center z-40 text-center px-4">
           {/* Section 1: Tagline Badge */}
-          <motion.div variants={staggerItemVariants} className="mb-9 ">
+          <motion.div variants={staggerItemVariants} className="mb-9 mt-32">
             <div className="relative inline-flex items-center justify-center rounded-[30px] bg-black p-[1px] shadow-lg">
               <div className="relative backdrop-blur-[60px] bg-black/70 rounded-[24px] px-4 py-2 flex items-center justify-center gap-2 border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                 <span className="absolute left-3 h-[6px] w-[6px] rounded-full bg-[#2c74f9] shadow-[0_0_14px_2px_#2c74f9] animate-pulse" />

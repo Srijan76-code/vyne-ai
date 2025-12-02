@@ -94,7 +94,10 @@ export const likeProject = async (req: Request, res: Response) => {
     console.log(projectId, userId);
     const existing = await prisma.projectLike.findUnique({
       where: {
-        userId_projectId: { userId: Number(userId), projectId: Number(projectId) },
+        userId_projectId: {
+          userId: Number(userId),
+          projectId: Number(projectId),
+        },
       },
     });
 
@@ -102,7 +105,10 @@ export const likeProject = async (req: Request, res: Response) => {
       // user already liked → unlike
       await prisma.projectLike.delete({
         where: {
-          userId_projectId: { userId: Number(userId), projectId: Number(projectId) },
+          userId_projectId: {
+            userId: Number(userId),
+            projectId: Number(projectId),
+          },
         },
       });
 
@@ -131,7 +137,7 @@ export const likeProject = async (req: Request, res: Response) => {
   }
 };
 
-export const cloneProject = async (req:Request, res:Response) => {
+export const cloneProject = async (req: Request, res: Response) => {
   const { userId, projectId } = req.body;
 
   try {
@@ -154,7 +160,30 @@ export const cloneProject = async (req:Request, res:Response) => {
   }
 };
 
+export const deleteCloneProject = async (req: Request, res: Response) => {
+  const { userId, projectId } = req.query;
+  if (!userId || !projectId) {
+  return res.status(400).json({ error: "Invalid inputs" });
+}
 
+  try {
+    await prisma.projectClone.delete({
+      where: {
+        userId_projectId: {
+          userId: Number(userId),
+          projectId: Number(projectId),
+        },
+      },
+    });
+
+    return res.json({ success: true });
+  } catch (err:any) {
+      if (err.code === "P2025") {
+      return res.status(404).json({ error: "Clone record not found" });
+    }
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export const countClonedProject = async (req: Request, res: Response) => {
   const { projectId } = req.body;
@@ -167,3 +196,22 @@ export const countClonedProject = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteProject = async (req: Request, res: Response) => {
+  const { id } = req.query;
+  if (!id || isNaN(Number(id))) {
+    return res.status(400).json({ error: "Invalid project ID" });
+  }
+  try {
+    const deleteProject = await prisma.project.delete({
+      where: { id: Number(id) },
+    });
+
+    return res.json({ success: true });
+  } catch (error) {
+    if ((error as any).code === "P2025") {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};

@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CirclePlus, LogOut, User, Users, Users2 } from "lucide-react";
@@ -19,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HoverButton } from "@/components/Buttons/HoverButton";
+import AlertLogout from "./AlertLogout";
 
 const Header = () => {
   return (
@@ -70,12 +72,7 @@ const Header = () => {
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
-                <div className="flex text-red-500 gap-2 items-center">
-                  <LogOut className="w-4 text-red-500 h-4" />
-                  <p>Logout</p>
-                </div>
-              </DropdownMenuItem>
+              <AlertLogout />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

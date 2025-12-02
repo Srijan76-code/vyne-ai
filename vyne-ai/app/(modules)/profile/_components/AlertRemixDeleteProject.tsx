@@ -20,16 +20,17 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
-export default function AlertDeleteProject({id}: {id: string}) {
+export default function AlertRemixDeleteProject({id,userId}: {id: string, userId: Number}) {
+
   async function handleDeleteProject() {
 
-    const res = await fetch("/api/projects?id="+id, {
+    const res = await fetch("/api/projects/clone?userId="+userId+"&projectId="+id, {
       method: "DELETE",
     });
 
     const data: { success: boolean } = await res.json();
     if (data.success) {
-      console.log("project deleted successfully");
+      console.log("remix project deleted successfully");
     }
 
   }
